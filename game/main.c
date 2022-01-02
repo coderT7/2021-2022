@@ -1,4 +1,6 @@
 #include"game.h"
+#include"ProcBar.h"
+
 
 int main()
 {
@@ -10,6 +12,7 @@ int main()
         switch(choose)
         {
             case 1:
+                process_bar();
                 Game();
                 break;
             case 0:
