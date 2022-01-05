@@ -14,6 +14,8 @@ int main()
     pop_back(phead);
     pop_front(phead);
     pop_front(phead);
+    pop_front(phead);
+    pop_front(phead);
     ListNode *pos = find(phead,20);
     insert(pos,40);
     insert(pos,80);

@@ -87,6 +87,7 @@ ListNode* find(ListNode *phead,LTDatatype x)
         cur = cur->next;
     }
     printf("未找到该数据！\n");
+    return NULL;
 }
 void insert(ListNode *pos,LTDatatype x)
 {
