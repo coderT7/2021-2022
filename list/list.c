@@ -59,7 +59,7 @@ void pop_back(ListNode *phead)
     prev->next = phead;
     free(tail);
     tail = NULL;*/
-    erase((phead->prev));
+    erase(&(phead->prev));
     printf("尾删成功！\n");
 }
 void pop_front(ListNode *phead)
@@ -72,12 +72,13 @@ void pop_front(ListNode *phead)
     second->prev = phead;
     free(first);
     first = NULL;*/
-    erase((phead->next));
+    erase(&(phead->next));
     printf("头删成功！\n");
 }
 ListNode* find(ListNode *phead,LTDatatype x)
 {
     assert(phead);
+    assert(phead->next != phead);
     ListNode *cur = phead->next;
     while(cur != phead)
     {
@@ -97,21 +98,20 @@ void insert(ListNode *pos,LTDatatype x)
     newnode->next = pos;
     pos->prev = newnode;
 }
-void erase(ListNode *pos)
+void erase(ListNode **pos)
 {
-    if(pos == NULL)
+    if(*pos == NULL)
     {
         printf("该结点不存在！\n");
         return ;
     }
-    ListNode *prev = (pos)->prev;
-    ListNode *next = (pos)->next;
+    ListNode *prev = (*pos)->prev;
+    ListNode *next = (*pos)->next;
+    free(*pos);
+    *pos = NULL;
     prev->next = next;
     next->prev = prev;
-    free(pos);
-    pos = NULL;
     printf("删除成功\n");
-
 }
 
 void clean(ListNode **pphead)

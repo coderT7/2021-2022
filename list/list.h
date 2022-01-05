@@ -30,7 +30,7 @@ ListNode* find(ListNode *phead,LTDatatype x);
 
 void insert(ListNode *pos,LTDatatype x);
 
-void erase(ListNode *pos);
+void erase(ListNode **pos);
 
 void clean(ListNode **phead);
 
