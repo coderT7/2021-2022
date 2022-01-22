@@ -104,7 +104,7 @@ void robot_move(int board[][COL])
 	}
 }
 
-int check_result(int board[][COL], int x, int y, enum DIV div)
+static int check_result(int board[][COL], int x, int y, enum DIV div)
 {
 	int _x = x - 1;
 	int _y = y - 1;
@@ -125,6 +125,18 @@ int check_result(int board[][COL], int x, int y, enum DIV div)
 		case DOWN:
 			_x--;
 			break;
+		case LEFT_UP:
+			_y--; _x--;
+			break;
+		case RIGHT_DOWN:
+			_y++; _x++;
+			break;
+		case LEFT_DOWN:
+			_y--; _x++;
+			break;
+		case RIGHT_UP:
+			_y++; _x--;
+			break;
 		default:
 			break;
 		}
@@ -141,7 +153,9 @@ int is_over(int board[][COL],int x, int y)
 {
 	int count1 = check_result(board, x, y, LEFT) + check_result(board, x, y, RIGHT) + 1;
 	int count2 = check_result(board, x, y, UP) + check_result(board, x, y, DOWN) + 1;
-	if (count1 == 3 || count2 == 3)
+	int count3 = check_result(board, x, y, LEFT_UP) + check_result(board, x, y, RIGHT_DOWN) + 1;
+	int count4 = check_result(board, x, y, RIGHT_UP) + check_result(board, x, y, LEFT_DOWN) + 1;
+	if (count1 == 3 || count2 == 3 || count3 == 3 || count4 == 4)
 		return board[x - 1][y - 1];
 	for(int i = 0; i < ROW; i++)
 		for (int j = 0; j < COL; j++)

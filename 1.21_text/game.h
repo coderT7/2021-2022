@@ -12,7 +12,11 @@ enum DIV
 	LEFT,
 	RIGHT,
 	UP,
-	DOWN
+	DOWN,
+	LEFT_UP,
+	RIGHT_DOWN,
+	RIGHT_UP,
+	LEFT_DOWN
 };
 enum player
 {
