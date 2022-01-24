@@ -5,6 +5,7 @@
 //将最多排查地雷的步数设为全局变量
 //当排查一次地雷则对应减1，当排查次数为0时则胜出
 int step_num = 0;
+int x = 0, y = 0;
 void menu()
 {
 	printf("***************************************\n");
@@ -35,7 +36,7 @@ void mark_mine(char show[ROWS][COLS], int row, int col, int flag)
 			}
 			else if(flag == 3)
 			{
-				if (show[x][y] != '#' || show[x][y] == ' ')
+				if (show[x][y] != '#')
 				{
 					show_board(show, row, col);
 					printf("该坐标未被标记！\n");
@@ -103,7 +104,6 @@ void game()
 		//只有进行排查地雷时，步数才会减一
 		case 1:
 			find_mine(mine, show, ROW, COL);
-			step_num--;
 			break;
 		case 2:
 			mark_mine(show, ROW, COL, flag);
@@ -115,6 +115,8 @@ void game()
 			printf("输入有误，请重新输入!\n");
 			break;
 		}
+		if (mine[x][y] == '1')
+			break;
 	}
 
 }
@@ -199,7 +201,6 @@ static void find_more(char mine[ROWS][COLS], char show[ROWS][COLS], int x, int y
 
 void find_mine(char mine[ROWS][COLS], char show[ROWS][COLS], int row, int col)
 {
-	int x = 0, y = 0;
 	while (1)
 	{
 		printf("请输入要排查的坐标：");
@@ -218,13 +219,21 @@ void find_mine(char mine[ROWS][COLS], char show[ROWS][COLS], int row, int col)
 		}
 		else
 		{
-			int count = count_mine(mine, x, y);
-			if (count == '0')
-				find_more(mine, show, x, y);
-			show[x][y] = count;
-			show_board(show, ROW, COL);
-			step_num--;
-			break;
+			if (show[x][y] != ' ' && show[x][y] == '*')
+			{
+				int count = count_mine(mine, x, y);
+				if (count == '0')
+				{
+					find_more(mine, show, x, y);
+					step_num++;
+				}
+				show[x][y] = count;
+				show_board(show, ROW, COL);
+				step_num--;
+				break;
+			}
+			else
+				break;
 		}
 	}
 	//进行最后一步排雷后则步数为0，说明游戏胜利
