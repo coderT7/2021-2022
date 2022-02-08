@@ -34,36 +34,36 @@ void all_menu::get_enter(int enter)
 		do_wrok(m);
 		break;
 	}
-	//case 2:
-	//{
-	//	menu* m = new menu2;
-	//	do_wrok(m);
-	//	break;
-	//}
-	//case 3:
-	//{
-	//	menu* m = new menu3;
-	//	do_wrok(m);
-	//	break;
-	//}
-	//case 4:
-	//{
-	//	menu* m = new menu4;
-	//	do_wrok(m);
-	//	break;
-	//}
-	//case 5:
-	//{
-	//	menu* m = new menu5;
-	//	do_wrok(m);
-	//	break;
-	//}
-	//case 6:
-	//{
-	//	menu* m = new menu6;
-	//	do_wrok(m);
-	//	break;
-	//}
+	case 2:
+	{
+		menu* m = new menu2;
+		do_wrok(m);
+		break;
+	}
+	case 3:
+	{
+		menu* m = new menu3;
+		do_wrok(m);
+		break;
+	}
+	case 4:
+	{
+		menu* m = new menu4;
+		do_wrok(m);
+		break;
+	}
+	case 5:
+	{
+		menu* m = new menu5;
+		do_wrok(m);
+		break;
+	}
+	case 6:
+	{
+		menu* m = new menu6;
+		do_wrok(m);
+		break;
+	}
 	default:
 		break;
 	}
@@ -83,6 +83,7 @@ void menu1::show_menu()
 void menu1::get_enter(int enter)
 {
 	int a, b, c;
+	float r;
 	int tmp = enter;
 	while (tmp)
 	{
@@ -106,9 +107,9 @@ void menu1::get_enter(int enter)
 			max_num(a, b, c);
 			break;
 		case 4:
-			cout << "请输入圆的周长：";
-			cin >> a;
-			cal_circle(a);
+			cout << "请输入圆的半径：";
+			cin >> r;
+			cal_circle(r);
 			break;
 		case 5:
 			m_print();
@@ -133,52 +134,269 @@ void menu2::show_menu()
 	cout << "3.输入两个不同类型数据后，经过适当的运算（加、减、乘、除）后输出" << endl;
 	cout << "4.实现计算三角形面积、立方体的体积和表面积" << endl;
 	cout << "5.验证int、char、float、double、long int、short int等数据类型的长度" << endl;
-	cout << "0.返回上一层";
+	cout << "0.返回上一层" << endl;
 }
-//void menu3::show_menu()
-//{
-//	cout << "1、输入自己的生日，姓名拼音的首字母，年龄，然后输出" << endl;
-//	cout << "2、输入自己高考所有课程的成绩, 计算平均成绩和标准差，将其输出" << endl;
-//	cout << "3、输出“学生管理系统”的菜单" << endl;
-//	cout << "4、请设计口令验证程序，输入时，不显示口令明文，代之以‘#’"<< endl;
-//	cout << "5、输入3门课的成绩，并输出所有成绩中最大的一门课" << endl;
-//	cout << "6、先输入两个学生的姓名和生日，如果二者的姓名，生日都是相同的，则输出yes,否则输出no" << endl;
-//	cout << "7、什么是短路规则？编写程序，验证短路规则" << endl;
-//	cout << "8、自加运算的前缀和后缀有什么区别？编写程序，验证之" << endl;
-//	cout << "7. 编写程序，求解一元二次方程" << endl;
-//	cout << "0.返回上一层";
-//}
-//void menu4::show_menu()
-//{
-//	cout << "1.一个整数，它加上100后是一个完全平方数，再加上168又是一个完全平方数，请问该数是多少" << endl;
-//	cout << "2.为使电文保密，往往按一定规律将其转换成密码，收报人再按约定的规律将其译回原文" << endl;
-//	cout << "3.判断101 - 200之间有多少个素数，并输出所有素数" << endl;
-//	cout << "4.打印菱形" << endl;
-//	cout << "5.求1 + 2!+ 3!+ ... + 20!的和。要求：阶乘用函数实现" << endl;
-//	cout << "6.设计一个程序，模拟抛硬币的测试" << endl;
-//	cout << "0.返回上一层" << endl;
-//}
-//void menu5::show_menu()
-//{
-//	cout << "1.编写程序，设计函数，实现把两个输入的字符串交叉合并，合并时，把小写字母改成大写。" << endl;
-//	cout << "2.输入一个由单词组成的字符串，对字符串进行相应处理"<< endl;
-//	cout << "3.身份证号码处理" << endl;
-//	cout << "4.设计方案，验证C语言中，函数参数传递时，参数入栈的顺序。（清晰的文字描述和例子）" << endl;
-//	cout << "5.设计方案，验证C语言中，“指针变量的存储空间与类型无关，指针的运算看类型”的结论。" << endl;
-//	cout << "0.返回上一层";
-//}
-//void menu6::show_menu()
-//{
-//	cout << "1.把一个正整数的各位数求和" << endl;
-//	cout << "2.把一个正整数倒置" << endl;
-//	cout << "3.先设计最大公约数函数，利用该函数，设计求最大公倍数的函数" << endl;
-//	cout << "4.把一个正整数化为二进制" << endl;
-//	cout << "5.使用提供0 - 9数字点阵字模，编写显示字模函数" << endl;
-//	cout << "6.编写程序，设计函数，实现把两个输入的字符串交叉合并，合并时，把小写字母改成大写。" << endl;
-//	cout << "7.将文本文件按照一定的算法进行加密" << endl;
-//	cout << "8.计算计算机专业的学生大学毕业后的发量" << endl;
-//	cout << "0.返回上一层";
-//}
-
+void menu2::get_enter(int enter)
+{
+	int n;
+	float d, f, g;
+	int tmp = enter;
+	while (tmp)
+	{
+		switch (tmp)
+		{
+		case 0:
+			break;
+		case 1:
+			cout << "进行信息格式化输出：" << endl;
+			print();
+			break;
+		case 2:
+			m_toupper();
+			break;
+		case 3:
+			cout << "请输入要运算的两个数值：";
+			cin >> f >> d;
+			four_arithmetic(f, d);
+			break;
+		case 4:
+		{
+			cout << "计算三角形面积/立方体的体积和表面积" << endl;
+			cout << "请选择要进行三角形的相关计算/立方体的相关计算->输入1/2" << endl;
+			cin >> n;
+			if (n == 1)
+			{
+				cout << "请输入三角形的三边长度：";
+				cin >> d >> f >> g;
+				geometry_cal(d, f, g, n);
+			}
+			else if (n == 2)
+			{
+				cout << "请输入立方体的边长：";
+				cin >> d;
+				geometry_cal(d);
+			}
+			else
+				cout << "选择错误！" << endl;
+			break;
+		}
+		case 5:
+			cout << "验证int、char、float、double、long int、short int等数据类型的长度" << endl;
+			data_size();
+			break;
+		default:
+			cout << "输入有误，请重新选择：";
+			break;
+		}
+		system("pause");
+		system("cls");
+		menu2().show_menu();
+		cin >> tmp;
+	}
+}
+void menu3::show_menu()
+{
+	cout << "1、输入自己的生日，姓名拼音的首字母，年龄，然后输出" << endl;
+	cout << "2、输入自己高考所有课程的成绩, 计算平均成绩和标准差，将其输出" << endl;
+	cout << "3、输出“学生管理系统”的菜单" << endl;
+	cout << "4、请设计口令验证程序，输入时，不显示口令明文，代之以‘#’"<< endl;
+	cout << "5、输入3门课的成绩，并输出所有成绩中最大的一门课" << endl;
+	cout << "6、先输入两个学生的姓名和生日，如果二者的姓名，生日都是相同的，则输出yes,否则输出no" << endl;
+	cout << "7、什么是短路规则？编写程序，验证短路规则" << endl;
+	cout << "8、自加运算的前缀和后缀有什么区别？编写程序，验证之" << endl;
+	cout << "9、编写程序，求解一元二次方程" << endl;
+	cout << "0.返回上一层" << endl;
+}
+void menu3::get_enter(int enter)
+{
+	int tmp = enter;
+	while (tmp)
+	{
+		switch (tmp)
+		{
+		case 0:
+			break;
+		case 1:
+			print_1();
+			break;
+		case 2:
+			print_2();
+			break;
+		case 3:
+			print_3();
+			break;
+		case 4:
+			password();
+			break;
+		case 5:
+			max_3();
+			break;
+		case 6:
+			m_compare();
+			break;
+		case 7:
+			rule();
+			break;
+		case 8:
+			difference();
+			break;
+		case 9:
+			solve_equ();
+			break;
+		default:
+			cout << "输入有误，请重新选择：";
+			break;
+		}
+		system("pause");
+		system("cls");
+		menu3().show_menu();
+		cin >> tmp;
+	}
+}
+void menu4::show_menu()
+{
+	cout << "1.一个整数，它加上100后是一个完全平方数，再加上168又是一个完全平方数，请问该数是多少" << endl;
+	cout << "2.为使电文保密，往往按一定规律将其转换成密码，收报人再按约定的规律将其译回原文" << endl;
+	cout << "3.判断101 - 200之间有多少个素数，并输出所有素数" << endl;
+	cout << "4.打印菱形" << endl;
+	cout << "5.求1 + 2!+ 3!+ ... + 20!的和。要求：阶乘用函数实现" << endl;
+	cout << "6.设计一个程序，模拟抛硬币的测试" << endl;
+	cout << "0.返回上一层" << endl;
+}
+void menu4::get_enter(int enter)
+{
+	int tmp = enter;
+	while (tmp)
+	{
+		switch (tmp)
+		{
+		case 0:
+			break;
+		case 1:
+			solve_equ(2);
+			break;
+		case 2:
+			simple_encrypt();
+			break;
+		case 3:
+			m_prime();
+			break;
+		case 4:
+			print_diamond();
+			break;
+		case 5:
+			fac();
+			break;
+		case 6:
+			probability();
+			break;
+		default:
+			cout << "输入有误，请重新选择：";
+			break;
+		}
+		system("pause");
+		system("cls");
+		menu4().show_menu();
+		cin >> tmp;
+	}
+}
+void menu5::show_menu()
+{
+	cout << "1.编写程序，设计函数，实现把两个输入的字符串交叉合并，合并时，把小写字母改成大写。" << endl;
+	cout << "2.输入一个由单词组成的字符串，对字符串进行相应处理"<< endl;
+	cout << "3.身份证号码处理" << endl;
+	cout << "4.设计方案，验证C语言中，函数参数传递时，参数入栈的顺序。（清晰的文字描述和例子）" << endl;
+	cout << "5.设计方案，验证C语言中，“指针变量的存储空间与类型无关，指针的运算看类型”的结论。" << endl;
+	cout << "0.返回上一层" << endl;;
+}
+void menu5::get_enter(int enter)
+{
+	int tmp = enter;
+	while (tmp)
+	{
+		switch (tmp)
+		{
+		case 0:
+			break;
+		case 1:
+			merge_string();
+			break;
+		case 2:
+			string_manipulation();
+			break;
+		case 3:
+			ID_number_processing();
+			break;
+		case 4:
+			push_order();
+			break;
+		case 5:
+			point_conclusion();
+			break;
+		default:
+			cout << "输入有误，请重新选择：";
+			break;
+		}
+		system("pause");
+		system("cls");
+		menu5().show_menu();
+		cin >> tmp;
+	}
+}
+void menu6::show_menu()
+{
+	cout << "1.把一个正整数的各位数求和" << endl;
+	cout << "2.把一个正整数倒置" << endl;
+	cout << "3.先设计最大公约数函数，利用该函数，设计求最大公倍数的函数" << endl;
+	cout << "4.把一个正整数化为二进制" << endl;
+	cout << "5.使用提供0 - 9数字点阵字模，编写显示字模函数" << endl;
+	cout << "6.编写程序，设计函数，实现把两个输入的字符串交叉合并，合并时，把小写字母改成大写" << endl;
+	cout << "7.将文本文件按照一定的算法进行加密" << endl;
+	cout << "8.计算计算机专业的学生大学毕业后的发量" << endl;
+	cout << "0.返回上一层" << endl;
+}
+void menu6::get_enter(int enter)
+{
+	int tmp = enter;
+	while (tmp)
+	{
+		switch (tmp)
+		{
+		case 0:
+			break;
+		case 1:
+			digit_sum();
+			break;
+		case 2:
+			reverse_int();
+			break;
+		case 3:
+			max_div_min_mul();
+			break;
+		case 4:
+			change_bin();
+			break;
+		case 5:
+			digital_dot_matrix();
+			break;
+		case 6:
+			six_merge_string();
+			break;
+		case 7:
+			en_de_crypt();
+			break;
+		case 8:
+			last_hair();
+			break;
+		default:
+			cout << "输入有误，请重新选择：";
+			break;
+		}
+		system("pause");
+		system("cls");
+		menu6().show_menu();
+		cin >> tmp;
+	}
+}
 
 

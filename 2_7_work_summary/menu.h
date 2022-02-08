@@ -29,27 +29,27 @@ public:
 	virtual void show_menu();
 	virtual void get_enter(int input);
 };
-//class menu3 :public menu
-//{
-//public:
-//	virtual void show_menu();
-//	virtual void get_enter(int input);
-//};
-//class menu4 :public menu
-//{
-//public:
-//	virtual void show_menu();
-//	virtual void get_enter(int input);
-//};
-//class menu5 :public menu
-//{
-//public:
-//	virtual void show_menu();
-//	virtual void get_enter(int input);
-//};
-//class menu6 :public menu
-//{
-//public:
-//	virtual void show_menu();
-//	virtual void get_enter(int input);
-//};
+class menu3 :public menu
+{
+public:
+	virtual void show_menu();
+	virtual void get_enter(int input);
+};
+class menu4 :public menu
+{
+public:
+	virtual void show_menu();
+	virtual void get_enter(int input);
+};
+class menu5 :public menu
+{
+public:
+	virtual void show_menu();
+	virtual void get_enter(int input);
+};
+class menu6 :public menu
+{
+public:
+	virtual void show_menu();
+	virtual void get_enter(int input);
+};
