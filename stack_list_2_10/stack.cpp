@@ -17,7 +17,7 @@ int top(Stack& St)
 	else
 		return St.next->val;
 }
-Stack* buyNewNode(SDataType val)
+static Stack* buyNewNode(SDataType val)
 {
 	Stack* newnode = new Stack;
 	newnode->next = NULL;
@@ -28,11 +28,11 @@ Stack* buyNewNode(SDataType val)
 void push(Stack& St, SDataType val)
 {
 	Stack * newnode = buyNewNode(val);
-		Stack* tmp = St.next;
-		St.next = newnode;
-		newnode->next = tmp;
-		St.count++;
-		cout << "插入" << val << "成功" << endl;
+	Stack* tmp = St.next;
+	St.next = newnode;
+	newnode->next = tmp;
+	St.count++;
+	cout << "插入" << val << "成功" << endl;
 }
 void pop(Stack& St)
 {
