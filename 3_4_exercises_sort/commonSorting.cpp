@@ -176,8 +176,8 @@ static int get_mid_index(int* arr, int left, int right)
 //挖坑法
 int part_sort_1(int* arr, int left, int right)
 {
-	int index = get_mid_index(arr, left, right);
-	swap(arr[index], arr[left]);
+	//int index = get_mid_index(arr, left, right);
+	//swap(arr[index], arr[left]);
 	int begin = left, end = right;
 	int pivot = begin;//左边先为坑
 	int key = arr[begin];//并将区域内最左边的值作为key值
@@ -202,8 +202,8 @@ int part_sort_1(int* arr, int left, int right)
 //左右指针法
 int part_sort_2(int* arr, int left, int right)
 {
-	int index = get_mid_index(arr, left, right);
-	swap(arr[index], arr[left]);
+	//int index = get_mid_index(arr, left, right);
+	//swap(arr[index], arr[left]);
 
 	int begin = left, end = right;
 	int keyi = begin;
@@ -245,14 +245,14 @@ void my_quick_sort(int* arr, int left, int right)
 	if (left > right)
 		return;
 
-	int keyIndex = part_sort_1(arr, left, right);
+	int keyIndex = part_sort_3(arr, left, right);
 
 	//进行小区间优化
-	if (keyIndex - 1 - left > 30)
+	if (keyIndex - 1 - left > 13)
 		my_quick_sort(arr, left, keyIndex - 1);//递归左区间
 	else//到一定小的范围则改用插入排序
 		insert_sort(arr + left, keyIndex - 1 - left + 1);
-	if (right - (keyIndex + 1) > 30)
+	if (right - (keyIndex + 1) > 13)
 		my_quick_sort(arr, keyIndex + 1, right);//递归右区间
 	else
 		insert_sort(arr + keyIndex + 1, right - (keyIndex + 1) + 1);
@@ -270,7 +270,7 @@ void quick_sort_nonR(int* arr, int n)
 		s.pop();
 		int right = s.top();
 		s.pop();
-		int keyIndex = part_sort_1(arr, left, right);//进行单趟快排
+		int keyIndex = part_sort_3(arr, left, right);//进行单趟快排
 		if (keyIndex + 1 < right)//区间未分到最后，继续入栈
 		{
 			s.push(right);
@@ -356,10 +356,35 @@ void merge_sort_nonR(int* arr, int n)
 
 	}
 }
+
+void count_sort(int* arr, int n)
+{
+	int max = arr[0], min = arr[0];
+	for (int i = 0; i < n; i++)
+	{
+		if (max < arr[i])
+			max = arr[i];
+		if (min > arr[i])
+			min = arr[i];
+	}
+	int range = max - min + 1;//max-min是两数之间相差的个数，如“[0-9]”0到9差9个数，但实际有十个数
+	int* count = (int*)malloc(sizeof(int) * range);
+	memset(count, 0, sizeof(int)*range);//初始化为0
+	//进行计数
+	for (int i = 0; i < n; i++)
+		count[arr[i] - min]++;
+	//进行排序
+	int j = 0;
+	for (int i = 0; i < range; i++)
+	{
+		while (count[i]--)
+			arr[j++] = i + min;
+	}
+}
 void TestOP()
 {
 	srand((unsigned int)time(NULL));
-	const int N = 1000000;
+	const int N = 100000;
 	int* a1 = (int*)malloc(sizeof(int) * N);
 	int* a2 = (int*)malloc(sizeof(int) * N);
 	int* a3 = (int*)malloc(sizeof(int) * N);
@@ -376,29 +401,29 @@ void TestOP()
 		a6[i] = a1[i];
 	}
 	int begin1 = clock();
-	//insert_sort(a1, N);
+	select_sort(a1, N);
 	int end1 = clock();
-	int begin2 = clock();
-	my_shell_sort(a2, N);
-	int end2 = clock();
-	int begin3 = clock();
-	quick_sort_nonR(a3, N);
-	int end3 = clock();
+	//int begin2 = clock();
+	//my_shell_sort(a2, N);
+	//int end2 = clock();
+	//int begin3 = clock();
+	//quick_sort_nonR(a3, N);
+	//int end3 = clock();
 	int begin4 = clock();
-	heap_sort(a4, N);
+	heap_sort(a2, N);
 	int end4 = clock();
 	int begin5 = clock();
-	my_quick_sort(a5, 0, N-1);
+	my_quick_sort(a2, 0, N-1);
 	int end5 = clock();
-	int begin6 = clock();
-	merge_sort_nonR(a6, N);
-	int end6 = clock();
-	printf("InsertSort:%d\n", end1 - begin1);
-	printf("ShellSort:%d\n", end2 - begin2);
-	printf("SelectSort:%d\n", end3 - begin3);
+	//int begin6 = clock();
+	//merge_sort_nonR(a6, N);
+	//int end6 = clock();
+	printf("select_sort:%d\n", end1 - begin1);
+	//printf("ShellSort:%d\n", end2 - begin2);
+	//printf("quick_sort_nonR:%d\n", end3 - begin3);
 	printf("HeapSort:%d\n", end4 - begin4);
 	printf("my_quick_sort:%d\n", end5 - begin5);
-	printf("MergeSort:%d\n", end6 - begin6);
+	//printf("merge_sort_nonR:%d\n", end6 - begin6);
 	free(a1);
 	free(a2);
 	free(a3);
@@ -409,13 +434,13 @@ void TestOP()
 int main()
 {
 	TestOP();
-	//int* arr = (int*)malloc(sizeof(int) * 100);
-	//for (int i = 0; i < 100; i++)
-	//{
-	//	arr[i] = rand();
+	//int arr[11] = { 0 };
+	//for (int i = 0; i < 11; i++) {
+	//	arr[i] = i;
 	//}
-	//merge_sort_nonR(arr, 100);
-	//for (int i = 0; i < 100; i++)
+	//my_quick_sort(arr, 0, 10);
+	//for (int i = 0; i < 11; i++) {
 	//	cout << arr[i] << " ";
+	//}
 	return 0;
 }
