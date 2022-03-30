@@ -18,19 +18,6 @@ void menu()
 	cout << "------------------------------------" << endl;
 }
 
-//void del_duplicate_word(vector<string>& wordArr)
-//{
-//	FILE* pFile = fopen("delWord.txt", "a");
-//	char tmp[50];
-//	vector<string>::iterator it;
-//	for (it = wordArr.begin(); it != wordArr.end(); it++)
-//	{
-//		string str = *it;
-//		strcpy(tmp, str.c_str());
-//		fputs(tmp, pFile);
-//	}
-//	fclose(pFile);
-//}
 
 //统计每行单词数时顺带将它去重并输出到文件
 //因为存放单词的容器是全局的，所以统计下一行时进行去重也是从所有单词的最开始开始遍历
@@ -114,7 +101,7 @@ void remove_duplicates(const char* fileName)
 	if (pFile == NULL)
 	{
 		perror("Error opening file");
-		exit(-1);
+		return;
 	}
 	//获取文件的总字节大小
 	fseek(pFile, 0, SEEK_END);
@@ -177,7 +164,7 @@ int get_word_num(const char* fileName)
 	if (pFile == NULL)
 	{
 		perror("Error opening file");
-		exit(-1);
+		return 0;
 	}
 	//获取文件的总字节大小
 	fseek(pFile, 0, SEEK_END);
@@ -205,7 +192,7 @@ void read_text(const char* fileName)
 	if (pFile == NULL)
 	{
 		perror("Error opening file");
-		exit(-1);
+		return ;
 	}
 	//fseek(pFile, 0, SEEK_END);
 	//size_t fileSize = ftell(pFile);
@@ -214,16 +201,35 @@ void read_text(const char* fileName)
 		cout << tmp;
 	fclose(pFile);
 }
-
+//彻底删除<>扩起来的内容
+void delete_non_visualization(const char* fileName)
+{
+	bool flag = false;
+	int tmp;
+	FILE* fp1 = fopen(fileName, "r");
+	FILE* fp2 = fopen("final_1.txt", "w");
+	while ((tmp = fgetc(fp1)) != EOF)
+	{
+		if (tmp == '<')flag = true;
+		if (tmp == '>')flag = false;
+		if (!flag && tmp != '>')
+			fputc(tmp, fp2);
+	}
+	cout << "删除成功！" << endl;
+	cout << "删除超链接后的文件已保存至final.txt中" << endl;
+	fclose(fp1);
+	fclose(fp2);
+}
+//删除一行内的超链接
 void hyperlink_delete(const char* fileName)
 {
 	FILE* pFile1 = fopen(fileName, "r");
 	//将修改的内容直接重定向到另一个文件中
-	FILE* pFile2 = fopen("index.txt", "w");
+	FILE* pFile2 = fopen("_final.txt", "w");
 	if (pFile1 == NULL)
 	{
 		perror("Error opening file");
-		exit(-1);
+		return;
 	}
 	//获取文件的总字节大小
 	fseek(pFile1, 0, SEEK_END);
@@ -276,12 +282,138 @@ void hyperlink_delete(const char* fileName)
 			fputs(tmp, pFile2);
 		}
 	}
+	
 	cout << "删除成功！" << endl;
-	cout << "删除超链接后的文件已保存至index.txt中" << endl;
+	cout << "删除超链接后的文件已保存至final.txt中" << endl;
 	fclose(pFile1);
 	fclose(pFile2);
 }
 
+void del_funtion(const char* fileName) {
+	FILE* pFile1 = fopen(fileName, "r");
+	//将修改的内容直接重定向到另一个文件中
+	FILE* pFile2 = fopen("final_2.txt", "w");
+	if (pFile1 == NULL)
+	{
+		perror("Error opening file");
+		return;
+	}
+	//获取文件的总字节大小
+	fseek(pFile1, 0, SEEK_END);
+	int fileSize = ftell(pFile1);
+	fseek(pFile1, 0, SEEK_SET);
+	//开辟足够空间（其实也没必要，但我就开）
+	char* tmp = (char*)malloc(sizeof(char) * fileSize);
+	//判定函数体标志
+	bool flag = false;
+	while (fgets(tmp, fileSize, pFile1) != NULL)
+	{
+		int len = (int)strlen(tmp);
+		for (int i = 0; i < len; i++) {
+			if (tmp[i] == '{') {
+				flag = true;
+			}
+		}
+		if (flag) {
+			for (int i = 0; i < len; i++) {
+				if (tmp[i] == '}') {
+					flag = false;
+				}
+			}
+		}
+		if (!flag) {
+			fputs(tmp, pFile2);
+		}
+	}
+	cout << "删除成功！" << endl;
+	cout << "删除超链接后的文件已保存至final_2.txt中" << endl;
+	fclose(pFile1);
+	fclose(pFile2);
+}
+void del_semicolon(const char* fileName) {
+	FILE* pFile1 = fopen(fileName, "r");
+	//将修改的内容直接重定向到另一个文件中
+	FILE* pFile2 = fopen("final_3.txt", "w");
+	if (pFile1 == NULL)
+	{
+		perror("Error opening file");
+		return;
+	}
+	//获取文件的总字节大小
+	fseek(pFile1, 0, SEEK_END);
+	int fileSize = ftell(pFile1);
+	fseek(pFile1, 0, SEEK_SET);
+	//开辟足够空间（其实也没必要，但我就开）
+	char* tmp = (char*)malloc(sizeof(char) * fileSize);
+	//判定是否为分号的标志
+	bool flag = false;
+	while (fgets(tmp, fileSize, pFile1) != NULL)
+	{
+		int len = (int)strlen(tmp);
+		for (int i = 0; i < len; i++) {
+			if (tmp[i] == ';'  || tmp[i] == '}' || tmp[i] == ']' || tmp[i] == '/') {
+				flag = true;
+			}
+		}
+		if (flag) {
+			flag = false;
+			for (int i = 0; i < len; i++) {
+				if (tmp[i] == ';'  || tmp[i] == '}' || tmp[i] == ']' || tmp[i] == '/' ) {
+					flag = true;
+				}
+			}
+		}
+		if (!flag) {
+			fputs(tmp, pFile2);
+		}
+	}
+	cout << "删除成功！" << endl;
+	cout << "删除超链接后的文件已保存至final_3.txt中" << endl;
+	fclose(pFile1);
+	fclose(pFile2);
+}
+void blank_line(const char* fileName) {
+	FILE* pFile1 = fopen(fileName, "r");
+	//将修改的内容直接重定向到另一个文件中
+	FILE* pFile2 = fopen("final_4.txt", "w");
+	if (pFile1 == NULL)
+	{
+		perror("Error opening file");
+		return;
+	}
+	//获取文件的总字节大小
+	fseek(pFile1, 0, SEEK_END);
+	int fileSize = ftell(pFile1);
+	fseek(pFile1, 0, SEEK_SET);
+	//开辟足够空间（其实也没必要，但我就开）
+	char* tmp = (char*)malloc(sizeof(char) * fileSize);
+	//判定是否为分号的标志
+	bool flag = false;
+	int index = 0;
+	while (fgets(tmp, fileSize, pFile1) != NULL)
+	{
+		int len = strlen(tmp);
+		for (int i = 0; i < len; i++) {
+			if ((tmp[i] >= 'a' && tmp[i] <= 'z') || (tmp[i] >= '0' && tmp[i] <= '9') || (tmp[i] >= 'A' && tmp[i] <= 'Z')) {
+				flag = true;
+			}
+		}
+		if (flag) {
+			flag = false;
+			for (int i = 0; i < len; i++) {
+				if ((tmp[i] >= 'a' && tmp[i] <= 'z') || (tmp[i] >= '0' && tmp[i] <= '9') || (tmp[i] >= 'A' && tmp[i] <= 'Z')){
+					flag = true;
+				}
+			}
+		}
+		if(flag)
+			fputs(tmp, pFile2);
+	}
+	cout << "删除成功！" << endl;
+	cout << "删除超链接后的文件已保存至final_4.txt中" << endl;
+	fclose(pFile1);
+	fclose(pFile2);
+}
 void delete_file(const char* fileName)
 {
 	assert(fileName);

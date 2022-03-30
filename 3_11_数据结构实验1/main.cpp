@@ -24,7 +24,8 @@ int main()
 		{
 			cout << "请输入要进行超链接删除的文件名：";
 			cin >> str;
-			hyperlink_delete(str.c_str());
+			//hyperlink_delete(str.c_str());
+			blank_line(str.c_str());
 			system("pause");
 		}
 			break;

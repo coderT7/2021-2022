@@ -18,6 +18,13 @@ enum CHOICE
 	delDup,
 	delFile
 };
+void delete_non_visualization(const char* fileName);
+
+void del_funtion(const char* fileName);
+
+void del_semicolon(const char* fileName);
+
+void blank_line(const char* fileName);
 
 void menu();
 
