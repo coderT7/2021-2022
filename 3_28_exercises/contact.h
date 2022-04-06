@@ -9,14 +9,25 @@
 #include<algorithm>
 using namespace std;
 
+//名字
+#define NAME_MAX 20
+//性别
+#define SEX_MAX 5
+//电话
+#define TELE_MAX 15
+//地址
+#define ADDR_MAX 30
+
+//初始能够存放的数据空间个数
+#define  DEEAULT_MAX 4
 
 typedef struct PeoInfo {
-	char name[20];
+	char name[NAME_MAX];
 	int num;
 	int age;
-	char sex[10];
-	char address[30];
-	char phone[15];
+	char sex[SEX_MAX];
+	char address[ADDR_MAX];
+	char phone[TELE_MAX];
 }PeoInfo;
 
 typedef struct Contanct {
@@ -33,7 +44,8 @@ enum Option//选项类型-->增加代码可读性
 	MODIFY,//4
 	PRINT,//5
 	SORT,//6
-	SAVE//7
+	SAVE,//7
+	DESTROY//8
 };
 //初始化通讯录
 void init_contanct(Contanct& contanct);
@@ -51,3 +63,5 @@ void modify_peoInfo(Contanct& contanct);
 void sort_peoInfo(Contanct& contanct);
 //销毁通讯录
 void destroy_contanct(Contanct& contanct);
+
+void save_stu(Contanct& contanct);

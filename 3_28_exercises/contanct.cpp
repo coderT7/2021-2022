@@ -2,14 +2,39 @@
 
 #include"contact.h"
 
-
+//为了防止重名 这里给个id进行标识
 int id = 1;
+
+static void check_capacity(Contanct& contanct) {
+	if (contanct.size == contanct.capacity) {
+		PeoInfo* tmp = (PeoInfo*)realloc(contanct.info, sizeof(PeoInfo) * contanct.capacity * 2);
+		assert(tmp);
+		contanct.info = tmp;
+		contanct.capacity *= 2;
+	}
+}
+
+static void load_contanct(Contanct& contanct) {
+	FILE* pFile = fopen("peoInfo.dat", "rb");
+	assert(pFile);
+	PeoInfo tmp = { 0 };
+	while (fread(&tmp, sizeof(PeoInfo), 1, pFile)) {
+		check_capacity(contanct);
+		contanct.info[contanct.size++] = tmp;
+		id++;
+	}
+	fclose(pFile);
+	pFile = nullptr;
+}
+
 //初始化通讯录
 void init_contanct(Contanct& contanct) {
-	contanct.info = (PeoInfo*)malloc(sizeof(PeoInfo) * 4);
+	contanct.info = (PeoInfo*)malloc(sizeof(PeoInfo) * DEEAULT_MAX);
 	contanct.size = 0;
 	contanct.capacity = 4;
+	load_contanct(contanct);
 }
+
 //打印通讯录
 void print_contanct(Contanct& contanct) {
 	
@@ -28,14 +53,7 @@ void print_contanct(Contanct& contanct) {
 		}
 	}
 }
-static void check_capacity(Contanct& contanct) {
-	if (contanct.size == contanct.capacity) {
-		PeoInfo* tmp = (PeoInfo*)realloc(contanct.info, sizeof(PeoInfo) * contanct.capacity * 2);
-		assert(tmp);
-		contanct.info = tmp;
-		contanct.capacity *= 2;
-	}
-}
+
 //增加联系人
 void add_peoInfo(Contanct& contanct) {
 	check_capacity(contanct);
@@ -54,15 +72,16 @@ void add_peoInfo(Contanct& contanct) {
 		cout << "请输入要添加的第" << i + 1 << "位联系人的手机号码" << endl;
 		cin >> contanct.info[contanct.size].phone;
 		cout << "添加成功" << endl;
+		contanct.info[contanct.size].num = id++;
 		contanct.size++;
-		contanct.info[i].num = id++;
 		int ans = 0;
 		if (i + 1 < n) {
-			cout << "是否要继续进行添加？" << endl << "输入0退出当前模块，按任意键默认继续添加" << endl;
+			cout << "是否要继续进行添加？" << endl << "输入0退出当前模块，输入其它数字默认继续添加" << endl;
 			cout << "请输入：";
 			cin >> ans;
 			if (!ans) break;
 		}
+		check_capacity(contanct);
 	}
 }
 //查找联系人
@@ -200,4 +219,19 @@ void destroy_contanct(Contanct& contanct) {
 	else {
 		return;
 	}
+}
+
+void save_stu(Contanct& contanct) {
+	
+	if (contanct.size == 0) {
+		cout << "当前通讯录无信息！" << endl;
+		return;
+	}
+	FILE* pFile = fopen("peoInfo.dat", "w");
+	for (int i = 0; i < contanct.size; i++) {
+		fwrite(contanct.info + i, sizeof(PeoInfo), 1, pFile);
+	}
+	cout << "保存成功" << endl;
+	fclose(pFile);
+	pFile = nullptr;
 }

@@ -3,49 +3,14 @@
 
 #include"contact.h"
 
-
-void* my_memcpy(void* str1, void* str2, size_t count) {
-	assert(str1 && str2);
-
-	void* ret = str1;
-	while (count--) {
-		*(char*)str1 = *(char*)str2;
-		str1 = (char*)str1 + 1;
-		str2 = (char*)str2 + 1;
-	}
-
-	return str1;
-}
-void* my_memmove(void* str1, void* str2, size_t count) {
-	assert(str1 && str2);
-
-	void* ret = str1;
-
-	if (str1 < str2) {
-		while (count--) {
-			*(char*)str1 = *(char*)str2;
-			str1 = (char*)str1 + 1;
-			str2 = (char*)str2 + 1;
-		}
-	}
-	else {
-		str1 = (char*)str1 + count - 1;
-		str2 = (char*)str2 + count - 1;
-		*(char*)str1 = *(char*)str2;
-		str1 = (char*)str1 - 1;
-		str2 = (char*)str2 - 1;
-	}
-
-	return ret;
-}
-
 void menu()
 {
 	printf("*****************************************\n");
 	printf("******    1.Add        2.Del       ******\n");
 	printf("****** 	  3.Search     4.Modify    ******\n");
 	printf("******	  5.Print      6.Sort      ******\n");
-	printf("******	  7.Save       0.Exit      ******\n");
+	printf("******	  7.Save       8.Destroy   ******\n");
+	printf("******          0.Exit             ******\n");
 	printf("*****************************************\n");
 }
 
@@ -66,7 +31,7 @@ int main()
 		{
 			//利用枚举类型增加代码可读性；
 		case EXIT:
-			destroy_contanct(contanct);
+			save_stu(contanct);
 			printf("退出通讯录\n");
 			break;
 		case ADD:
@@ -94,6 +59,14 @@ int main()
 		case SORT:
 			system("cls");
 			sort_peoInfo(contanct);
+			break;
+		case SAVE:
+			system("cls");
+			save_stu(contanct);
+			break;
+		case DESTROY:
+			system("cls");
+			destroy_contanct(contanct);
 			break;
 		default:
 			printf("选择错误\n");
