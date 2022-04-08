@@ -7,11 +7,13 @@
 //扩展思路二：利用多态，本质是思路一，但优点在于代码延展性好，维护容易
 int main()
 {
-	int input = 0;
+	int input = 0; int _input = 0;
+	vector<string>tmp;
 	string str;
 	do
 	{
 		system("cls");
+		cout << "当前程序操作的文件夹仅unionDir，请勿输入其它的文件夹名称！" << endl;
 		menu();
 		cin >> input;
 		switch (input)
@@ -60,9 +62,26 @@ int main()
 			cin >> str;
 			remove_duplicates(str.c_str());
 			system("pause");
+			break;
 		}
 		case Exit:
 			cout << "感谢您的使用，祝您生活愉快！" << endl;
+			break;
+		case readFolder:
+		{
+			//太长太臃肿了，还是分出一个函数吧qaq
+			inside_floder();
+			/*cout << endl;
+			for (auto i = 0; i < tmp.size(); i++) {
+				cout << tmp[i] << endl;
+			}*/
+		}
+			break;
+		case removeFile:
+			cout << "请输入你要移动的文件名字：";
+			cin >> str;
+			remove_file(str.c_str());
+			system("pause");
 			break;
 		default:
 			cout << "输入有误，请重新输入！" << endl;
