@@ -5,9 +5,11 @@
 ListNode* buy_newnode(LTDatatype x)
 {
     ListNode* newnode = (ListNode*)malloc(sizeof(ListNode));
-    newnode->next = NULL;
-    newnode->prev = NULL;
-    newnode->val = x;
+    if (newnode != nullptr) {
+        newnode->next = NULL;
+        newnode->prev = NULL;
+        newnode->val = x;
+    }
     return newnode;
 }
 
