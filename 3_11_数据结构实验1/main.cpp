@@ -1,5 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 #include"main.h"
+#include"SeqList.h"
+SeqList sList;
 
 //当前版本每次只能处理一个文件的信息，但可以多次进行（每次获得的文件信息仅针对当次处理的文件）
 //扩展：可处理多个文件信息
@@ -82,6 +84,9 @@ int main()
 			cin >> str;
 			remove_file(str.c_str());
 			system("pause");
+			break;
+		case textFour:
+			about_seqList();
 			break;
 		default:
 			cout << "输入有误，请重新输入！" << endl;

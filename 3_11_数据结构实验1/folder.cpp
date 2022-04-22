@@ -45,7 +45,8 @@ void remove_file(const char* fileName)
 		cout << "已将" << fileName << "移动至" << newPath << endl;
 	}
 }
-bool dirExists(const std::string& dirName_in)
+
+static bool dirExists(const std::string& dirName_in)
 {
 	DWORD ftyp = GetFileAttributesA(dirName_in.c_str());
 	if (ftyp == INVALID_FILE_ATTRIBUTES)
@@ -56,6 +57,7 @@ bool dirExists(const std::string& dirName_in)
 
 	return false;    // this is not a directory!  
 }
+
 void get_all_file_name(const string& dirPath)
 {
 	if (dirExists(dirPath) == false) {

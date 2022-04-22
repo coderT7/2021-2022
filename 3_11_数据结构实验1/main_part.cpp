@@ -1,8 +1,11 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
 #include"main.h"
+#include"SeqList.h"
+
 
 //作为文件与程序内单词的转送点，用于去重
+//vector容器与顺序表相类似，故沿用之前的容器，顺序表代码已实现（已进行一定程度的测试）
 vector<string> wordArr;
 //菜单，没啥好说
 void menu()
@@ -20,7 +23,6 @@ void menu()
 	cout << "|-----      0. EXIT          ------|" << endl;
 	cout << "------------------------------------" << endl;
 }
-
 void _menu()
 {
 	cout << "------------------------------------" << endl;
@@ -33,7 +35,95 @@ void _menu()
 	cout << "|-----      0. BACK          ------|" << endl;
 	cout << "------------------------------------" << endl;
 }
-
+void _menu_4() {
+	cout << "这是数据结构上机实验四的顺序表的菜单" << endl;
+	cout << "由于步骤与之前去重输出文件重复，故不打算将其写入该程序主体部分，所以独立出该菜单" << endl;
+	cout << "------------------------------------" << endl;
+	cout << "|          顺 序 表 相 关          |" << endl;
+	cout << "|                                  |" << endl;
+	cout << "|-----      1. FIND WORD     ------|" << endl;
+	cout << "|-----      2. SAVE WORD     ------|" << endl;
+	cout << "|-----      3. PRINT WORD    ------|" << endl;
+	cout << "|-----      4. DEL  DUP WORD ------|" << endl;
+	cout << "|-----      0. BACK          ------|" << endl;
+	cout << "------------------------------------" << endl;
+}
+static enum _Option {
+	Back,
+	FindWord,
+	SaveWord,
+	PrintWord,
+	DelDupWord
+};
+//寻找最长的单词
+static string find_maxChar_word() {
+	int max = 0;;
+	string maxWord = "";
+	for (auto it : wordArr) {
+		if (it.size() > max) {
+			max = (int)it.size();
+			maxWord = it;
+		}
+	}
+	return maxWord;
+}
+//打印单词列表
+static void print_wordArr() {
+	for (auto it : wordArr) {
+		cout << it << endl;
+	}
+}
+//删除重复的单词
+static void delDup_wordArr() {
+	int count = 0;
+	vector<string>::iterator it1, it2;
+	for (it1 = wordArr.begin(); it1 != wordArr.end(); it1++) {
+		for (it2 = it1 + 1; it2 != wordArr.end();) {
+			if (!(*it1).compare(*it2)) {
+				it2 = wordArr.erase(it2);
+			}
+			else {
+				it2++;
+			}
+		}
+	}
+	print_wordArr();
+}
+//顺序表相关的操作
+void about_seqList() {
+	int input = 0;
+	string word;
+	do {
+		system("cls");
+		_menu_4();
+		cout << "请输入你要进行的操作" << endl;
+		cin >> input;
+		switch (input) {
+		case Back:
+			cout << "返回上一层" << endl;
+			system("pause");
+			break;
+		case FindWord:
+			cout << "最长的单词是：" << find_maxChar_word() << endl;
+			system("pause");
+			break;
+		case SaveWord:
+			cout << "保存成功" << endl;
+			system("pause");
+			break;
+		case PrintWord:
+			print_wordArr();
+			system("pause");
+			break;
+		case DelDupWord:
+			delDup_wordArr();
+			system("pause");
+			break;
+		default:
+			break;
+		}
+	} while (input);
+}
 
 //统计每行单词数时顺带将它去重并输出到文件
 //因为存放单词的容器是全局的，所以统计下一行时进行去重也是从所有单词的最开始开始遍历
@@ -130,6 +220,11 @@ void remove_duplicates(const char* fileName)
 	{
 		del_dup_word(tmp);
 	}
+#if 0
+	for (auto it : wordArr) {
+		cout << it << endl;
+	}
+#endif
 	cout << "去重完成！保存至文件delWord.txt中" << endl;
 }
 
@@ -199,6 +294,17 @@ int get_word_num(const char* fileName)
 	//remove("delWord.txt");
 	//del_duplicate_word(wordArr);
 	cout << "捕获的单词列表已保存至word.txt中" << endl;
+	//添加的关于单词进行的顺序表操作
+	int choose = 0;
+	cout << "请选择是否对栈中的单词列表进行操作：> “0”否/“1”是" << endl;
+	cin >> choose;
+	if (choose == 1) {
+		remove_duplicates("word.txt");
+		about_seqList();
+	}
+	else {
+		cout << "输入错误！" << endl;
+	}
 	return sum;
 }
 //阅读文件

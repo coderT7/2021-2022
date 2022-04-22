@@ -204,7 +204,7 @@ void blank_line(const char* fileName) {
 	int index = 0;
 	while (fgets(tmp, fileSize, pFile1) != NULL)
 	{
-		int len = strlen(tmp);
+		int len = (int)strlen(tmp);
 		for (int i = 0; i < len; i++) {
 			if ((tmp[i] >= 'a' && tmp[i] <= 'z') || (tmp[i] >= '0' && tmp[i] <= '9') || (tmp[i] >= 'A' && tmp[i] <= 'Z')) {
 				flag = true;

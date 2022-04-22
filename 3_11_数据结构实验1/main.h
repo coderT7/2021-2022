@@ -3,6 +3,8 @@
 #include<iostream>
 #include<cstring>
 #include<unordered_map>
+#include<unordered_set>
+#include<set>
 #include<string>
 #include<algorithm>
 #include<cassert>
@@ -24,7 +26,8 @@ enum CHOICE
 	delDup,
 	delFile,
 	readFolder,
-	removeFile
+	removeFile,
+	textFour
 };
 
 void delete_all(const char* fileName);
@@ -38,7 +41,12 @@ void del_semicolon(const char* fileName);
 void blank_line(const char* fileName);
 
 void menu();
+
 void _menu();
+
+void _menu_4();
+
+void about_seqList();
 
 void hyperlink_delete(const char* fileName);
 
