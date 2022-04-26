@@ -10,6 +10,7 @@ Window::Window(int width, int height, int flag)
 {
     //::说明使用的是全局函数
     m_HWND = ::initgraph(width, height, flag);
+    ::setbkmode(TRANSPARENT);
 }
 
 void Window::setWindowTitle(const std::string& title)
