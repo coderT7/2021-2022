@@ -3,6 +3,7 @@
 #include<vector>
 #include"PushButton.h"
 #include"Empoyee.h"
+#include"EditLine.h"
 #include"Table.h"
 class Mangerment
 {
@@ -15,6 +16,15 @@ class Mangerment
 		//还漏了个EXIT，有空再补
 		MENU = 10
 	};
+	enum Option_1 {
+		ID,
+		NAME,
+		SALARY1,
+		SALARY2,
+		SALARY3,
+		SALARY4,
+		SALARY5
+	};
 public:
 	//启动整个程序
 	Mangerment();
@@ -23,8 +33,11 @@ public:
 	int menu();
 	void display();
 	void add();
+	void updateTableData();
 	void erase();
 	void modify();
+	int getAllSalary(Empoyee& empoyee);
+	int getModifyOption();
 	void search();
 	//画背景
 	void drawBackground();
@@ -34,7 +47,7 @@ public:
 	void readFile(const std::string& fileName);
 	void saveFile(const std::string& fileName);
 
-private://界面的相关属性
+private://主界面的相关属性
 	IMAGE m_bk;
 	ExMessage m_msg;
 	std::vector<PushButton*> menu_btns;
@@ -43,5 +56,18 @@ private://数据的相关属性
 	std::vector<Empoyee> vec_staff;
 private://表格
 	Table* m_table;
+public://删除数据页面
+	PushButton* delBtnOfID;
+	Table* delTable;
+	EditLine* delEditOfID;
+	EditLine* delEditOfName;
+	PushButton* delBtnOfName;
+public://查找数据界面
+	PushButton* searchBtn;
+	Table* searchTable;
+	EditLine* searchEdit;
+	std::vector<Empoyee> vec_modifyStaff;
+public://修改数据界面
+	std::vector<PushButton*> option_btns;
 };
 

@@ -5,7 +5,7 @@
 int main()
 {
 	//创建窗口
-	Window window(640,900,EW_SHOWCONSOLE);
+	Window window(865,1200,EW_SHOWCONSOLE | EW_NOCLOSE);
 	//设置窗口标题
 	window.setWindowTitle("职工管理系统");
 	//实例化管理对象
