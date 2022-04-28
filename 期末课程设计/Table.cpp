@@ -1,8 +1,9 @@
 #include "Table.h"
+#include"SalaryTable.h"
 #include<iostream>
 Table::Table(int row, int col)
 	:BasicWidget(0, 0, 0, 0), m_rows(row), m_cols(col),
-	m_curPage(0), m_maxPage(0), m_extraData(0), m_flag(false), allSalary(0.0)
+	m_curPage(0), m_maxPage(0), m_extraData(0), m_flag(false)
 {
 	m_preBtn = new PushButton("上一页");
     m_nextBtn = new PushButton("下一页");
@@ -52,6 +53,7 @@ void Table::insertData(const std::string& data)
 
 void Table::show()
 {
+	
 	drawHeader();
 	drawTableGrid();
 	drawTableData();
@@ -64,6 +66,7 @@ void Table::clear()
 
 void Table::drawTableGrid()
 {
+	settextcolor(WHITE);
 	//确定表格的行列数
 	//画横线
 	for (int i = 0; i < m_rows + 1; i++) {
@@ -78,7 +81,8 @@ void Table::drawTableGrid()
 
 void Table::drawButton()
 {
-	m_preBtn->move(m_x, m_h + 400);
+	settextcolor(WHITE);
+	m_preBtn->move(m_x, m_h + 450);
 	m_nextBtn->move(m_preBtn->x() + m_preBtn->width(), m_preBtn->y());
 	m_firstBtn->move(m_nextBtn->x() + m_nextBtn->width(), m_nextBtn->y());
 	m_lastBtn->move(m_firstBtn->x() + m_firstBtn->width(), m_firstBtn->y());
@@ -91,16 +95,20 @@ void Table::drawButton()
 
 	char str[50] = { 0 };
 	//利用sprintf_s函数实现下标能够动态变化
+	settextcolor(WHITE);
 	sprintf_s(str, "第 %d 页/共 %d 页", m_curPage + 1, m_maxPage + 1);
 	::outtextxy(m_lastBtn->x() + m_lastBtn->width() + 100, m_lastBtn->y(), str);
 
 	char str_1[50] = { 0 };
-	sprintf_s(str_1, "当前平均工资为 %lf", 1.0 * allSalary / m_data.size());
+	sprintf_s(str_1, "当前人均工资为 %lf", 1.0 * SalaryTable::allSalary / m_data.size());
 	::outtextxy(m_lastBtn->x() + m_lastBtn->width() + 100, m_lastBtn->y() - 25, str_1);
+
+	
 }
 
 void Table::drawTableData()
 {
+	settextcolor(WHITE);
 	if (m_data.empty()) {
 		return;
 	}
@@ -126,6 +134,7 @@ void Table::drawTableData()
 
 void Table::drawHeader()
 {
+	settextcolor(WHITE);
 	::setlinestyle(PS_SOLID, 2);
 	::rectangle(m_x, m_y - 30, m_x + m_w, m_y);
 	for (int i = 0; i < m_cols; i++) {
@@ -159,20 +168,17 @@ std::vector<std::string> Table::get_data()
 	return m_data;
 }
 
-double Table::getAllSalary()
-{
-	return allSalary;
-}
+
 
 void Table::updatePage()
 {
-	if (m_rows >= m_data.size()) {
+	if (m_rows >= (int)m_data.size()) {
 		m_maxPage = 0;
-		m_extraData = m_data.size();
+		m_extraData = (int)m_data.size();
 	}
 	else {
-		m_maxPage = m_data.size() / m_rows;
-		m_extraData = m_data.size() % m_rows;
+		m_maxPage = (int)m_data.size() / m_rows;
+		m_extraData = (int)m_data.size() % m_rows;
 	}
 	
 	

@@ -5,6 +5,7 @@
 #include"Empoyee.h"
 #include"EditLine.h"
 #include"Table.h"
+#include"SalaryTable.h"
 class Mangerment
 {
 	enum Option {
@@ -13,7 +14,8 @@ class Mangerment
 		ERASE,
 		MODIFY,
 		SEARCH,
-		//还漏了个EXIT，有空再补
+		STATISTICS,
+		EXIT,
 		MENU = 10
 	};
 	enum Option_1 {
@@ -34,6 +36,8 @@ public:
 	void display();
 	void add();
 	void updateTableData();
+	void updataSalaryTableData();
+	void statistics();
 	void erase();
 	void modify();
 	int getAllSalary(Empoyee& empoyee);
@@ -56,6 +60,7 @@ private://数据的相关属性
 	std::vector<Empoyee> vec_staff;
 private://表格
 	Table* m_table;
+	SalaryTable* m_salaryTable;
 public://删除数据页面
 	PushButton* delBtnOfID;
 	Table* delTable;

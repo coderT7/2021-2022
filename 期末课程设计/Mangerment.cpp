@@ -6,6 +6,7 @@
 #include<cstdlib>
 #include<sstream>
 #include<unordered_map>
+#include<algorithm>
 using namespace std;
 
 Mangerment::Mangerment()
@@ -13,7 +14,8 @@ Mangerment::Mangerment()
     //在开始“run”之前将数据先读取进程序
     readFile("./Images/information.txt");
     //加载背景图
-    ::loadimage(&m_bk, "./Images/bk5.png", Window::width(), Window::height());
+    ::loadimage(&m_bk, "./Images/bk8.png", Window::width(), Window::height());
+    
     //设置整体的字体字号
     ::settextstyle(20, 0, "宋体");
     //创建功能的按钮
@@ -22,6 +24,7 @@ Mangerment::Mangerment()
     menu_btns.push_back(new PushButton("删除工资信息"));
     menu_btns.push_back(new PushButton("修改工资信息"));
     menu_btns.push_back(new PushButton("查找工资信息"));
+    menu_btns.push_back(new PushButton("统计工资信息"));
     menu_btns.push_back(new PushButton("退出系统"));
 
     //设置每个按钮的位置
@@ -35,18 +38,31 @@ Mangerment::Mangerment()
     }
     //创建表格，用于展示数据
     m_table = new Table;
+    m_salaryTable = new SalaryTable;
     //设置行列以及表头
     m_table->setRowCount(16);
-    
     m_table->setHeader(m_header);
+
+    m_salaryTable->setRowCount(16);
+    m_salaryTable->setHeader(m_header);
     //将职工数据读入到表格中
     for (auto& val : vec_staff) {
         m_table->insertData(val.formateInfo());
-        m_table->allSalary += val.salary6;
+        m_salaryTable->insertData(val.formateInfo());
+        m_salaryTable->allSalary += val.salary6;
+        m_salaryTable->allSalary1 += val.salary1;
+        m_salaryTable->allSalary2 += val.salary2;
+        m_salaryTable->allSalary3 += val.salary3;
+        m_salaryTable->allSalary4 += val.salary4;
+        m_salaryTable->allSalary5 += val.salary5;
+        if (val.salary6 > 3000) m_salaryTable->moreThan3000Humans++;
+        if (val.salary6 < 2000) m_salaryTable->lessThan2000Humans++;
+        if (val.salary6 >= 2000 && val.salary6 <= 3000) m_salaryTable->between2000To3000Humans++;
     }
-
+    
     //居中表格
     m_table->move((Window::width() - m_table->width()) / 2, 250);
+    m_salaryTable->move((Window::width() - m_table->width()) / 2, 250);
 
     //删除界面
     delBtnOfID = new PushButton("删除", 0, 0, 50, 30);
@@ -144,20 +160,25 @@ void Mangerment::run()
         case Mangerment::SEARCH:
             search();
             break;
-        case Mangerment::MENU:
-            op = menu();
+        case Mangerment::STATISTICS:
+            statistics();
             break;
-        default:
+        case Mangerment::EXIT:
             //退出自动保存数据
             saveFile("./Images/information.txt");
             exit(0);
+            break;
+        case Mangerment::MENU:
+            op = menu();
+            break;
+        default: 
             break;
         } 
         Window::flushDraw();
     }
     Window::endDraw();
 }
-
+//菜单
 int Mangerment::menu()
 {
     for (int i = 0; i < menu_btns.size(); i++) {
@@ -180,14 +201,16 @@ void Mangerment::add()
     Empoyee tmp;
     int count = 0;
     char buf[1024] = { 0 };
+    memset(buf, 0, 1024);
     stringstream ss(buf);
 
     const char* str[] = { "请输入ID号","请输入姓名","请输入基本工资",
         "请输入职务工资","请输入津贴","请输入医疗保险","请输入公积金" };
-
+    
     for (int i = 0; i < 7; i++) {
         memset(buf, 0, 1024);
-        InputBox(buf, 1024, str[i], "添加新记录", NULL, 0, 0, true);
+        if (!InputBox(buf, 1024, str[i], "添加新记录", NULL, 0, 0, false))
+            return;
         if (i > 1) {
             count += atoi(buf);
         }
@@ -205,11 +228,35 @@ void Mangerment::add()
 void Mangerment::updateTableData()
 {
     m_table->clear();
-    m_table->allSalary = 0;
     for (auto val : vec_staff){
-        m_table->insertData(val.formateInfo());
-        m_table->allSalary += val.salary6;
+        m_table->insertData(val.formateInfo());  
     }
+}
+void Mangerment::updataSalaryTableData()
+{
+    m_salaryTable->clear();
+    m_salaryTable->allSalary = 0;
+    m_salaryTable->allSalary1 = 0;
+    m_salaryTable->allSalary2 = 0;
+    m_salaryTable->allSalary3 = 0;
+    m_salaryTable->allSalary4 = 0;
+    m_salaryTable->allSalary5 = 0;
+    for (auto val : vec_staff) {
+        m_salaryTable->insertData(val.formateInfo());
+        m_salaryTable->allSalary += val.salary6;
+        m_salaryTable->allSalary1 += val.salary1;
+        m_salaryTable->allSalary2 += val.salary2;
+        m_salaryTable->allSalary3 += val.salary3;
+        m_salaryTable->allSalary4 += val.salary4;
+        m_salaryTable->allSalary5 += val.salary5;
+        if (val.salary6 > 3000) m_salaryTable->moreThan3000Humans++;
+        if (val.salary6 < 2000) m_salaryTable->lessThan2000Humans++;
+        if (val.salary6 >= 2000 && val.salary6 <= 3000) m_salaryTable->between2000To3000Humans++;
+    }
+}
+void Mangerment::statistics()
+{
+    m_salaryTable->show();
 }
 //删除数据
 void Mangerment::erase()
@@ -254,6 +301,7 @@ void Mangerment::erase()
         delTable->clear();
         it = vec_staff.end();
         updateTableData();
+        updataSalaryTableData();
     }
 
     //按姓名删除
@@ -294,6 +342,7 @@ void Mangerment::erase()
             vec_staff.erase(it);
             delTable->clear();
             updateTableData();
+            updataSalaryTableData();
         }
         
     }
@@ -303,7 +352,6 @@ void Mangerment::erase()
         m_msg = Window::getMsg();
         if(m_msg.message == WM_KEYDOWN)
             if (m_msg.vkcode == VK_ESCAPE) {
-
                 delTable->clear();
                 delTable->set_status(false);
                 delEditOfID->flag = false;
@@ -378,7 +426,7 @@ void Mangerment::modify()
                 ss << tmp_1;
                 ss >> empoyee.salary1;
                 for (auto& val : vec_staff) {
-                    if (!tmp_1.compare(to_string(empoyee.salary1))) {
+                    if (!tmp.compare(to_string(val.id))) {
                         val.salary1 = empoyee.salary1;
                         val.salary6 = getAllSalary(val);
                     }
@@ -386,6 +434,7 @@ void Mangerment::modify()
             }
         }
         updateTableData();
+        updataSalaryTableData();
     }    
         break;
     case Mangerment::SALARY2: {
@@ -398,7 +447,7 @@ void Mangerment::modify()
                 ss << tmp_1;
                 ss >> empoyee.salary2;
                 for (auto& val : vec_staff) {
-                    if (!tmp_1.compare(to_string(empoyee.salary2))) {
+                    if (!tmp.compare(to_string(val.id))) {
                         val.salary2 = empoyee.salary2;
                         val.salary6 = getAllSalary(val);
                     }
@@ -407,6 +456,7 @@ void Mangerment::modify()
             }
         }
         updateTableData();
+        updataSalaryTableData();
     }     
         break;
     case Mangerment::SALARY3: {
@@ -419,7 +469,7 @@ void Mangerment::modify()
                 ss << tmp_1;
                 ss >> empoyee.salary3;
                 for (auto& val : vec_staff) {
-                    if (!tmp_1.compare(to_string(empoyee.salary3))) {
+                    if (!tmp.compare(to_string(val.id))) {
                         val.salary3 = empoyee.salary3;
                         val.salary6 = getAllSalary(val);
                     }       
@@ -427,6 +477,7 @@ void Mangerment::modify()
             }
         }
         updateTableData();
+        updataSalaryTableData();
     }
         break;
     case Mangerment::SALARY4: {
@@ -439,7 +490,7 @@ void Mangerment::modify()
                 ss << tmp_1;
                 ss >> empoyee.salary4;
                 for (auto& val : vec_staff) {
-                    if (!tmp_1.compare(to_string(empoyee.salary4))) {
+                    if (!tmp.compare(to_string(val.id))) {
                         val.salary4 = empoyee.salary4;
                         val.salary6 = getAllSalary(val);
                     }      
@@ -447,6 +498,7 @@ void Mangerment::modify()
             }
         }
         updateTableData();
+        updataSalaryTableData();
     }  
         break;
     case Mangerment::SALARY5: {
@@ -459,7 +511,7 @@ void Mangerment::modify()
                 ss << tmp_1;
                 ss >> empoyee.salary5;
                 for (auto& val : vec_staff) {
-                    if (!tmp_1.compare(to_string(empoyee.salary5))) {
+                    if (!tmp.compare(to_string(val.id))) {
                         val.salary5 = empoyee.salary5;
                         val.salary6 = getAllSalary(val);
                     }
@@ -467,18 +519,19 @@ void Mangerment::modify()
             }
         }
         updateTableData();
+        updataSalaryTableData();
     }
         break;
     default:
         break;
     }
 }
-
+//获取总工资
 int Mangerment::getAllSalary(Empoyee& empoyee)
 {
     return empoyee.salary1 + empoyee.salary2 + empoyee.salary3 + empoyee.salary4 + empoyee.salary5;
 }
-
+//获取修改选项
 int Mangerment::getModifyOption()
 {
     for (int i = 0; i < option_btns.size(); i++) {
@@ -490,7 +543,7 @@ int Mangerment::getModifyOption()
     }
     return -1;
 }
-
+//搜索数据
 void Mangerment::search()
 {
     searchBtn->show();
@@ -517,7 +570,6 @@ void Mangerment::search()
                 Empoyee empoyee(vec_staff[i]);
                 empoyee.averageSalary = average;
                 searchTable->insertData(empoyee.formateInfoOfAverage());
-                searchTable->allSalary += vec_staff[i].salary6;
                 vec_modifyStaff.emplace_back(vec_staff[i]);
                 cout << "平均工资" << average << endl;
             }
@@ -529,7 +581,6 @@ void Mangerment::search()
         m_msg = Window::getMsg();
         if (m_msg.message == WM_KEYDOWN)
             if (m_msg.vkcode == VK_ESCAPE) {
-                searchTable->allSalary = 0;
                 searchTable->clear();
                 searchTable->set_status(false);
                 searchEdit->flag = false;
@@ -539,15 +590,16 @@ void Mangerment::search()
             }
     }
 }
-
+//绘制背景
 void Mangerment::drawBackground()
 {
     ::putimage(0, 0, &m_bk);
 }
-
+//监听事件同步
 void Mangerment::event_loop()
 {
     m_table->event_loop(m_msg);
+    m_salaryTable->event_loop(m_msg);
     delTable->event_loop(m_msg);
 
     delEditOfID->event_loop(m_msg);
@@ -559,7 +611,7 @@ void Mangerment::event_loop()
     searchEdit->event_loop(m_msg);
     searchTable->event_loop(m_msg);
 }
-
+//读文件
 void Mangerment::readFile(const std::string& fileName)
 {
     fstream fRead(fileName, ios::in);
@@ -588,7 +640,7 @@ void Mangerment::readFile(const std::string& fileName)
     }
     fRead.close();
 }
-
+//写文件（保存文件）
 void Mangerment::saveFile(const std::string& fileName)
 {
     fstream fWrite(fileName, ios::out | ios::trunc);

@@ -15,22 +15,22 @@ public:
     void setHeader(const std::string& header);
     void insertData(const std::string& data);
 
-    void show();
-    void clear();
-    void drawTableGrid();
-    void drawButton();
-    void drawTableData();
-    void drawHeader();
+    virtual void show();
+    virtual void clear();
+    virtual void drawTableGrid();
+    virtual void drawButton();
+    virtual void drawTableData();
+    virtual void drawHeader();
     static std::vector<std::string> split(std::string str, char sperator = '\t');
     std::vector<std::string> get_data();
-    double getAllSalary();
+
     void updatePage();
 
     void event_loop(const ExMessage& msg);
 
     bool get_status();
     void set_status(bool flag);
-private:
+protected:
     //行列数
     int m_rows;
     int m_cols;
@@ -44,7 +44,7 @@ private:
     std::string m_header;
     std::vector<std::string> m_data;
 
-private:
+protected:
     //分页操作（页数）
     int m_curPage;
     int m_maxPage;
@@ -55,11 +55,9 @@ private:
     PushButton* m_firstBtn;
     PushButton* m_lastBtn;
 
-private:
+protected:
     //表格是否有数据
     bool m_flag;
-public:
-    //当前表格中的总工资的平均值
-    double allSalary;
+
 };
 
