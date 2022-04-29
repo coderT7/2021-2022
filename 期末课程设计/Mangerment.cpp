@@ -6,15 +6,25 @@
 #include<cstdlib>
 #include<sstream>
 #include<unordered_map>
-#include<algorithm>
+#include<algorithm> 
 using namespace std;
 
+//排序提供多个比较方式来满足不同的排序需求
+inline static int cmp_salary(const void* arg1, const void* arg2) {
+    return (*(Empoyee*)arg1).salary6 - (*(Empoyee*)arg2).salary6;
+}
+inline static int cmp_id(const void* arg1, const void* arg2) {
+    return (*(Empoyee*)arg1).id - (*(Empoyee*)arg2).id;
+}
+inline static int cmp_name(const void* arg1, const void* arg2) {
+    return (*(Empoyee*)arg1).name.compare((*(Empoyee*)arg2).name);
+}
 Mangerment::Mangerment()
 {
     //在开始“run”之前将数据先读取进程序
     readFile("./Images/information.txt");
     //加载背景图
-    ::loadimage(&m_bk, "./Images/bk8.png", Window::width(), Window::height());
+    ::loadimage(&m_bk, "./Images/bk5.png", Window::width(), Window::height());
     
     //设置整体的字体字号
     ::settextstyle(20, 0, "宋体");
@@ -31,7 +41,7 @@ Mangerment::Mangerment()
     for (int i = 0; i < menu_btns.size(); i++) {
         menu_btns[i]->setFixedSize(250, 50);
         int x = (Window::width() - menu_btns[i]->width()) / 2;
-        int vspace = (Window::height() - (int)menu_btns.size() * menu_btns[i]->height()) / 2;
+        int vspace = (Window::height() - (int)menu_btns.size() * menu_btns[i]->height()) / 2 - 100;
         int y = vspace + i * menu_btns[i]->height();
 
         menu_btns[i]->move(x, y);
@@ -104,15 +114,33 @@ Mangerment::Mangerment()
         
         option_btns[i]->move(x, y);
     }
+
+    //排序界面
+    sort_btns.push_back(new PushButton("根据ID排序"));
+    sort_btns.push_back(new PushButton("根据姓名排序"));
+    sort_btns.push_back(new PushButton("根据总工资排序"));
+    for (int i = 0; i < sort_btns.size(); i++) {
+        sort_btns[i]->setFixedSize(140, 30);
+        int y = 20 + 2 * i * sort_btns[i]->height();
+        int x = Window::width() / 2 + sort_btns[i]->width();
+
+        sort_btns[i]->move(x, y);
+    }
+
 }
 
 void Mangerment::run()
 {
+    cout << "测试1" << endl;
     int op = MENU;
     //由于画面较复杂时，画面会闪烁
     //使用BeginBatchDraw();FlushBatchDraw();EndBatchDraw();这三个函数的批量绘图模式即可解决
     Window::beginDraw();
     while (true) {
+        //qsort(&vec_staff[0], vec_staff.size(), sizeof(vec_staff[0]), compare);
+        updateTableData();
+        updataSalaryTableData();
+        cout << "测试2" << endl;
         Window::clear();
         drawBackground();
         
@@ -222,6 +250,7 @@ void Mangerment::add()
         tmp.salary3 >> tmp.salary4 >> tmp.salary5 >> tmp.salary6;
     vec_staff.push_back(tmp);
     updateTableData();
+    updataSalaryTableData();
     saveFile("./Images/information.txt");
 }
 //更新表格
@@ -254,9 +283,51 @@ void Mangerment::updataSalaryTableData()
         if (val.salary6 >= 2000 && val.salary6 <= 3000) m_salaryTable->between2000To3000Humans++;
     }
 }
+//统计表格信息
 void Mangerment::statistics()
 {
     m_salaryTable->show();
+
+    int op = -1;
+    for (int i = 0; i < sort_btns.size(); i++) {
+        sort_btns[i]->show();
+        //将当前信息同步到菜单按钮
+        sort_btns[i]->event_loop(m_msg);
+        if (sort_btns[i]->is_clicked())
+            op = i;
+    }
+    switch (op)
+    {
+    case 0: {
+        Sleep(200);
+        qsort(&vec_staff[0], vec_staff.size(), sizeof(vec_staff[0]), cmp_id);
+        updataSalaryTableData();
+        updateTableData();
+        Sleep(100);
+        op = -1;
+    }
+        break;
+    case 1: {
+        Sleep(200);
+        qsort(&vec_staff[0], vec_staff.size(), sizeof(vec_staff[0]), cmp_name);
+        updataSalaryTableData();
+        updateTableData();
+        Sleep(100);
+        op = -1;
+    }
+        break;
+    case 2: {
+        Sleep(200);
+        qsort(&vec_staff[0], vec_staff.size(), sizeof(vec_staff[0]), cmp_salary);
+        updataSalaryTableData();
+        updateTableData();
+        Sleep(100);
+        op = -1;
+    }
+        break;
+    default:
+        break;
+    }
 }
 //删除数据
 void Mangerment::erase()
@@ -396,6 +467,7 @@ void Mangerment::modify()
         }
         //cout << "测试4" << endl;
         updateTableData();
+        updataSalaryTableData();
     }
         break;
     case Mangerment::NAME: {
@@ -414,6 +486,7 @@ void Mangerment::modify()
             }
         }
         updateTableData();
+        updataSalaryTableData();
     }
         break;
     case Mangerment::SALARY1: {
@@ -534,11 +607,11 @@ int Mangerment::getAllSalary(Empoyee& empoyee)
 //获取修改选项
 int Mangerment::getModifyOption()
 {
-    for (int i = 0; i < option_btns.size(); i++) {
-        option_btns[i]->show();
+    for (int i = 0; i < sort_btns.size(); i++) {
+        sort_btns[i]->show();
         //将当前信息同步到菜单按钮
-        option_btns[i]->event_loop(m_msg);
-        if (option_btns[i]->is_clicked())
+        sort_btns[i]->event_loop(m_msg);
+        if (sort_btns[i]->is_clicked())
             return i;
     }
     return -1;

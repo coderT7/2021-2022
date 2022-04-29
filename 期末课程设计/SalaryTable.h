@@ -26,7 +26,7 @@ public:
     void clear() override;
 
     void drawButton() override;
-
+    void event_loop(const ExMessage& msg) override;
 
 public:
     //当前表格中的总工资的平均值
@@ -41,5 +41,6 @@ public:
     uint32 moreThan3000Humans;
     uint32 between2000To3000Humans;
     uint32 lessThan2000Humans;
+
 };
 

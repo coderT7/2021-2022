@@ -38,10 +38,18 @@ bool Empoyee::operator==(const Empoyee& right) const
 
 bool Empoyee::operator>(const Empoyee& right) const
 {
-	return this->id > right.id;
+	if (this->id > right.id)
+		return true;
+	return false;
+	/*else if (this->name.compare(right.name) > 0)
+		return true;*/
 }
 
 bool Empoyee::operator<(const Empoyee& right) const
 {
-	return this->id < right.id;
+	if (this->id < right.id)
+		return true;
+	return false;
+	/*else if (this->name.compare(right.name) > 0)
+		return true;*/
 }

@@ -5,7 +5,7 @@
 int main()
 {
 	//创建窗口
-	Window window(845,1350,EW_SHOWCONSOLE);
+	Window window(845,1350,EW_SHOWCONSOLE);//（测试完毕后记得将关闭的按钮去掉）
 	//设置窗口标题
 	window.setWindowTitle("职工管理系统");
 	//实例化管理对象

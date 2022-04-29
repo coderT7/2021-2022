@@ -26,7 +26,7 @@ public:
 
     void updatePage();
 
-    void event_loop(const ExMessage& msg);
+    virtual void event_loop(const ExMessage& msg);
 
     bool get_status();
     void set_status(bool flag);

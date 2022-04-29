@@ -5,6 +5,7 @@ SalaryTable::SalaryTable(int row, int col)
 	:Table(row, col), 
 	allSalary1(0.0), allSalary2(0.0), allSalary3(0.0), allSalary4(0.0), allSalary5(0.0)
 {
+
 }
 
 SalaryTable::~SalaryTable()
@@ -40,8 +41,6 @@ double SalaryTable::getAllSalary5()
 {
 	return allSalary5;
 }
-
-
 
 int SalaryTable::getMoreThan3000Humans()
 {
@@ -87,7 +86,7 @@ void SalaryTable::statisticsSalary()
 	::outtextxy(m_lastBtn->x() + m_lastBtn->width() + 100, m_lastBtn->y(), str);
 
 	char str_1[50] = { 0 };
-	sprintf_s(str_1, "当前人均工资为 %lf", 1.0 * allSalary / m_data.size());
+	sprintf_s(str_1, "当前人均工资为 %.2lf", 1.0 * allSalary / m_data.size());
 	::outtextxy(m_lastBtn->x() + m_lastBtn->width() + 100, m_lastBtn->y() - 25, str_1);
 
 	char str_2[50] = { 0 };
@@ -114,7 +113,6 @@ void SalaryTable::statisticsSalary()
 	sprintf_s(str_7, "公积金均值：%lf", 1.0 * allSalary5 / m_data.size());
 	::outtextxy(m_preBtn->x(), m_preBtn->y() - 165 + 5 * textheight(str_6) + 25, str_7);
 }
-
 void SalaryTable::statisticsHumans()
 {
 	char str_1[50] = { 0 };
@@ -143,9 +141,33 @@ void SalaryTable::drawButton()
 	m_nextBtn->show();
 	m_firstBtn->show();
 	m_lastBtn->show();
-	settextcolor(WHITE);
 	statisticsSalary();
 	statisticsHumans();
+}
+
+void SalaryTable::event_loop(const ExMessage& msg)
+{
+	m_preBtn->event_loop(msg);
+	m_nextBtn->event_loop(msg);
+	m_firstBtn->event_loop(msg);
+	m_lastBtn->event_loop(msg);
+
+	if (m_preBtn->is_clicked()) {
+		if (m_curPage != 0) {
+			m_curPage--;
+		}
+	}
+	if (m_nextBtn->is_clicked()) {
+		if (m_curPage != m_maxPage) {
+			m_curPage++;
+		}
+	}
+	if (m_firstBtn->is_clicked()) {
+		m_curPage = 0;
+	}
+	if (m_lastBtn->is_clicked()) {
+		m_curPage = m_maxPage;
+	}
 }
 
 

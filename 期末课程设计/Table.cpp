@@ -53,7 +53,6 @@ void Table::insertData(const std::string& data)
 
 void Table::show()
 {
-	
 	drawHeader();
 	drawTableGrid();
 	drawTableData();
@@ -66,7 +65,6 @@ void Table::clear()
 
 void Table::drawTableGrid()
 {
-	settextcolor(WHITE);
 	//确定表格的行列数
 	//画横线
 	for (int i = 0; i < m_rows + 1; i++) {
@@ -81,8 +79,7 @@ void Table::drawTableGrid()
 
 void Table::drawButton()
 {
-	settextcolor(WHITE);
-	m_preBtn->move(m_x, m_h + 450);
+	m_preBtn->move(m_x, m_h + 425);
 	m_nextBtn->move(m_preBtn->x() + m_preBtn->width(), m_preBtn->y());
 	m_firstBtn->move(m_nextBtn->x() + m_nextBtn->width(), m_nextBtn->y());
 	m_lastBtn->move(m_firstBtn->x() + m_firstBtn->width(), m_firstBtn->y());
@@ -95,12 +92,11 @@ void Table::drawButton()
 
 	char str[50] = { 0 };
 	//利用sprintf_s函数实现下标能够动态变化
-	settextcolor(WHITE);
 	sprintf_s(str, "第 %d 页/共 %d 页", m_curPage + 1, m_maxPage + 1);
 	::outtextxy(m_lastBtn->x() + m_lastBtn->width() + 100, m_lastBtn->y(), str);
 
 	char str_1[50] = { 0 };
-	sprintf_s(str_1, "当前人均工资为 %lf", 1.0 * SalaryTable::allSalary / m_data.size());
+	sprintf_s(str_1, "当前人均工资为 %.2lf", 1.0 * SalaryTable::allSalary / m_data.size());
 	::outtextxy(m_lastBtn->x() + m_lastBtn->width() + 100, m_lastBtn->y() - 25, str_1);
 
 	
@@ -108,7 +104,6 @@ void Table::drawButton()
 
 void Table::drawTableData()
 {
-	settextcolor(WHITE);
 	if (m_data.empty()) {
 		return;
 	}
@@ -134,7 +129,6 @@ void Table::drawTableData()
 
 void Table::drawHeader()
 {
-	settextcolor(WHITE);
 	::setlinestyle(PS_SOLID, 2);
 	::rectangle(m_x, m_y - 30, m_x + m_w, m_y);
 	for (int i = 0; i < m_cols; i++) {
@@ -167,8 +161,6 @@ std::vector<std::string> Table::get_data()
 {
 	return m_data;
 }
-
-
 
 void Table::updatePage()
 {

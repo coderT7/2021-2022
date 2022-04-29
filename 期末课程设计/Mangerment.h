@@ -74,5 +74,7 @@ public://查找数据界面
 	std::vector<Empoyee> vec_modifyStaff;
 public://修改数据界面
 	std::vector<PushButton*> option_btns;
+private://排序数据
+	std::vector<PushButton*> sort_btns;
 };
 
