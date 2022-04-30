@@ -91,7 +91,7 @@ Mangerment::Mangerment()
     addTable = new Table;
     addTable->setRowCount(6);
     addTable->setHeader(m_header);
-    addTable->move((Window::width() - addTable->width()) / 2, (Window::height() - addTable->height()) / 3 + 50);
+    addTable->move((Window::width() - addTable->width()) / 2, (Window::height() - addTable->height()) / 2);
     addEdit->move((Window::width() - addEdit->width()) / 2, addTable->y() - 100);
     addBtn->move(addEdit->x() + addEdit->width() + 5, addEdit->y());
     //删除界面
@@ -133,7 +133,7 @@ Mangerment::Mangerment()
 
     for (int i = 0; i < option_btns.size(); i++) {
         option_btns[i]->setFixedSize(125, 30);
-        int y = searchTable->y() + 300;
+        int y = searchTable->y() + 450;
         int x = searchTable->x() + i * option_btns[i]->width() - 35;
         
         option_btns[i]->move(x, y);
@@ -273,12 +273,22 @@ void Mangerment::add()
 
     const char* str[] = { "请输入ID号","请输入姓名","请输入基本工资",
         "请输入职务工资","请输入津贴","请输入医疗保险","请输入公积金" };
-    
+
     if (addEdit->is_clicked() && !addEdit->flag) {
+    flag:
         for (int i = 0; i < 7; i++) {
             memset(buf, 0, 1024);
             if (!InputBox(buf, 1024, str[i], "添加新记录", NULL, 0, 0, false))
                 return;
+            tmp.id = atoi(buf);
+            if (find(vec_staff.begin(), vec_staff.end(), tmp) != vec_staff.end()) {
+                while (strcmp(buf,"我输错了")) {
+                    InputBox(buf, 1024, "该ID已存在，请输入“我输错了”后重新进行输入", "Error");
+                    Sleep(200);
+                }
+                Sleep(1000);
+                goto flag;
+            }
             text += (buf + (string)" ");
             if (i > 1) {
                 count += atoi(buf);
@@ -294,8 +304,9 @@ void Mangerment::add()
         addTable->insertData(tmp.formateInfo());
         addTable->set_status(true);
     }
-    if (addBtn->is_clicked() && addTable->get_status()) {
+    if (addBtn->is_clicked() && addTable->get_status() && addBtn->flag == false) {
         vec_staff.push_back(tmp);
+        addBtn->flag = true;
         updateTableData();
         updataSalaryTableData();
         addTable->set_status(false);
@@ -307,6 +318,7 @@ void Mangerment::add()
         m_msg = Window::getMsg();
         if (m_msg.message == WM_KEYDOWN)
             if (m_msg.vkcode == VK_SPACE) {
+                addBtn->flag = false;
                 addTable->clear();
                 addTable->set_status(false);
                 addEdit->flag = false;
@@ -459,13 +471,14 @@ void Mangerment::erase()
             delTable->set_status(true);
         }
     }
-    if (delBtnOfID->is_clicked() && it != vec_staff.end())
+    if (delBtnOfID->is_clicked() && it != vec_staff.end() && delBtnOfID->flag == false)
     {
         cout <<  "当前迭代器id：" << it->id << endl;
         std::cout << "delete" << std::endl;
         vec_staff.erase(it);
         delTable->clear();
         it = vec_staff.end();
+        delBtnOfID->flag = true;
         updateTableData();
         updataSalaryTableData();
     }
@@ -498,17 +511,19 @@ void Mangerment::erase()
         }
     }
     
-    if (delBtnOfName->is_clicked()){
+    if (delBtnOfName->is_clicked() && delBtnOfName->flag == false && delTable->get_status()){
         cout << "多线程测试进入！" << endl;
         /*future<bool> ret = async(launch::async, Mangerment::getChoice);
         cout << "这是多线程测试：" << ret.get() << endl;*/
 
+        //ID必须唯一，不唯一则默认删除ID排序在第一位的数据
         Empoyee empoyee;
         std::stringstream stream;
         tmp = delEditOfID->getDelIDInput();
         stream << tmp;
         stream >> empoyee.id;
         it = find(vec_staff.begin(), vec_staff.end(), empoyee);
+        
         //settextstyle(50, 0, "华文仿宋", 0, 0, 500, 0, 0, 0);
         //outtextxy(confirmBtn->x(), confirmBtn->y() - 100, "请点击确认按键");
         //if (confirmBtn->is_clicked()) confirmFlag = true;
@@ -516,6 +531,7 @@ void Mangerment::erase()
         if (it != vec_staff.end() ) {
             Sleep(200);
             vec_staff.erase(it);
+            delBtnOfName->flag = true;
             delTable->clear();
             updateTableData();
             updataSalaryTableData();
@@ -527,6 +543,8 @@ void Mangerment::erase()
         m_msg = Window::getMsg();
         if (m_msg.message == WM_KEYDOWN)
             if (m_msg.vkcode == VK_SPACE) {
+                delBtnOfID->flag = false;
+                delBtnOfName->flag = false;
                 delTable->clear();
                 delTable->set_status(false);
                 delEditOfID->flag = false;
@@ -550,24 +568,24 @@ void Mangerment::modify()
     {
     case Mangerment::ID: {
         tmp = searchEdit->getChooseModifyTextInput();
-        //cout << "测试1" << endl;
+        cout << "测试1   " << tmp << endl;
         for (int i = 0; i < vec_modifyStaff.size(); i++) {
-            //cout << "测试2   " << vec_modifyStaff.size() << endl;
+            cout << "测试2   " << vec_modifyStaff.size() << endl;
             if (!tmp.compare(to_string(vec_modifyStaff[i].id))) {
                 
                 std::string tmp_1 = searchEdit->getModifyTextInput();
-                Empoyee empoyee;
-                stringstream ss;
-                ss << tmp_1;
-                ss >> empoyee.id;
-                //cout << "测试5" << endl;
+                cout << "测试5    " << tmp << "   " <<  tmp_1 << endl;
                 for (auto& val : vec_staff) {
-                    if (!tmp_1.compare(to_string(empoyee.id)))
-                        val.id = empoyee.id;
+                    if (!tmp.compare(to_string(val.id))) {
+                        val.id = atoi(tmp_1.c_str());
+                        cout << "测试3  " << val.id <<  endl;
+                        break;
+                    }
                 }
-                //cout << "测试6" << endl;
+                break;
+                cout << "测试6" << endl;
                 
-                //cout << "测试3" << endl;
+                
             }
         }
         //cout << "测试4" << endl;
@@ -580,14 +598,14 @@ void Mangerment::modify()
         for (int i = 0; i < vec_modifyStaff.size(); i++) {
             if (!tmp.compare(to_string(vec_modifyStaff[i].id))) {
                 std::string tmp_1 = searchEdit->getModifyTextInput();
-                Empoyee empoyee;
-                stringstream ss;
-                ss << tmp_1;
-                ss >> empoyee.name;
+
                 for (auto& val : vec_staff) {
-                    if (!tmp_1.compare(empoyee.name))
-                        val.name = empoyee.name;
+                    if (!tmp.compare(to_string(val.id))) {
+                        val.name = tmp_1;
+                        break;
+                    }
                 }
+                break;
             }
         }
         updateTableData();
@@ -599,13 +617,9 @@ void Mangerment::modify()
         for (int i = 0; i < vec_modifyStaff.size(); i++) {
             if (!tmp.compare(to_string(vec_modifyStaff[i].id))) {
                 std::string tmp_1 = searchEdit->getModifyTextInput();
-                Empoyee empoyee;
-                stringstream ss;
-                ss << tmp_1;
-                ss >> empoyee.salary1;
                 for (auto& val : vec_staff) {
                     if (!tmp.compare(to_string(val.id))) {
-                        val.salary1 = empoyee.salary1;
+                        val.salary1 = atoi(tmp_1.c_str());
                         val.salary6 = getAllSalary(val);
                     }
                 }
@@ -620,16 +634,11 @@ void Mangerment::modify()
         for (int i = 0; i < vec_modifyStaff.size(); i++) {
             if (!tmp.compare(to_string(vec_modifyStaff[i].id))) {
                 std::string tmp_1 = searchEdit->getModifyTextInput();
-                Empoyee empoyee;
-                stringstream ss;
-                ss << tmp_1;
-                ss >> empoyee.salary2;
                 for (auto& val : vec_staff) {
                     if (!tmp.compare(to_string(val.id))) {
-                        val.salary2 = empoyee.salary2;
+                        val.salary2 = atoi(tmp_1.c_str());
                         val.salary6 = getAllSalary(val);
                     }
-                        
                 }
             }
         }
@@ -642,15 +651,11 @@ void Mangerment::modify()
         for (int i = 0; i < vec_modifyStaff.size(); i++) {
             if (!tmp.compare(to_string(vec_modifyStaff[i].id))) {
                 std::string tmp_1 = searchEdit->getModifyTextInput();
-                Empoyee empoyee;
-                stringstream ss;
-                ss << tmp_1;
-                ss >> empoyee.salary3;
                 for (auto& val : vec_staff) {
                     if (!tmp.compare(to_string(val.id))) {
-                        val.salary3 = empoyee.salary3;
+                        val.salary3 = atoi(tmp_1.c_str());
                         val.salary6 = getAllSalary(val);
-                    }       
+                    }
                 }
             }
         }
@@ -663,15 +668,11 @@ void Mangerment::modify()
         for (int i = 0; i < vec_modifyStaff.size(); i++) {
             if (!tmp.compare(to_string(vec_modifyStaff[i].id))) {
                 std::string tmp_1 = searchEdit->getModifyTextInput();
-                Empoyee empoyee;
-                stringstream ss;
-                ss << tmp_1;
-                ss >> empoyee.salary4;
                 for (auto& val : vec_staff) {
                     if (!tmp.compare(to_string(val.id))) {
-                        val.salary4 = empoyee.salary4;
+                        val.salary4 = atoi(tmp_1.c_str());
                         val.salary6 = getAllSalary(val);
-                    }      
+                    }
                 }
             }
         }
@@ -684,13 +685,9 @@ void Mangerment::modify()
         for (int i = 0; i < vec_modifyStaff.size(); i++) {
             if (!tmp.compare(to_string(vec_modifyStaff[i].id))) {
                 std::string tmp_1 = searchEdit->getModifyTextInput();
-                Empoyee empoyee;
-                stringstream ss;
-                ss << tmp_1;
-                ss >> empoyee.salary5;
                 for (auto& val : vec_staff) {
                     if (!tmp.compare(to_string(val.id))) {
-                        val.salary5 = empoyee.salary5;
+                        val.salary5 = atoi(tmp_1.c_str());
                         val.salary6 = getAllSalary(val);
                     }
                 }

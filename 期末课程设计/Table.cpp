@@ -40,7 +40,7 @@ void Table::setHeader(const std::string& header)
 	//格子的宽高
 	m_gridW = m_textW + 10;
 	m_gridH = m_textH + 10;
-	//表格的宽度
+	//表格的宽高
 	m_w = m_gridW * m_cols;
 	m_h = m_gridH * (m_rows + 1);
 }
@@ -79,7 +79,7 @@ void Table::drawTableGrid()
 
 void Table::drawButton()
 {
-	m_preBtn->move(m_x, m_h + 325);
+	m_preBtn->move(m_x, m_h + 375);
 	m_nextBtn->move(m_preBtn->x() + m_preBtn->width(), m_preBtn->y());
 	m_firstBtn->move(m_nextBtn->x() + m_nextBtn->width(), m_nextBtn->y());
 	m_lastBtn->move(m_firstBtn->x() + m_firstBtn->width(), m_firstBtn->y());
@@ -93,11 +93,11 @@ void Table::drawButton()
 	char str[50] = { 0 };
 	//利用sprintf_s函数实现下标能够动态变化
 	sprintf_s(str, "第 %d 页/共 %d 页", m_curPage + 1, m_maxPage + 1);
-	::outtextxy(m_lastBtn->x() + m_lastBtn->width() + 100, m_lastBtn->y(), str);
+	::outtextxy(m_lastBtn->x() + m_lastBtn->width() + 100, m_lastBtn->y() + 10, str);
 
 	char str_1[50] = { 0 };
 	sprintf_s(str_1, "当前人均工资为 %.2lf", 1.0 * SalaryTable::allSalary / m_data.size());
-	::outtextxy(m_lastBtn->x() + m_lastBtn->width() + 100, m_lastBtn->y() - 25, str_1);
+	::outtextxy(m_lastBtn->x() + m_lastBtn->width() + 100, m_lastBtn->y() - 15, str_1);
 
 	
 }
