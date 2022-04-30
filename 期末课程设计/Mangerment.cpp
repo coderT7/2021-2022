@@ -2,6 +2,8 @@
 
 #include<iostream>
 #include<conio.h>
+#include<thread>
+#include<future>
 #include<fstream>
 #include<cstdlib>
 #include<sstream>
@@ -23,11 +25,17 @@ Mangerment::Mangerment()
 {
     //在开始“run”之前将数据先读取进程序
     readFile("./Images/information.txt");
+    m_bks.resize(25);
     //加载背景图
-    ::loadimage(&m_bk, "./Images/bk5.png", Window::width(), Window::height());
+    for (int i = 1; i <= 22; i++) {
+        char tmp[100] = { 0 };
+        sprintf_s(tmp, "./Images/bk%d.png", i);
+        ::loadimage(&m_bks[i], tmp, Window::width(), Window::height());
+    }
     
     //设置整体的字体字号
-    ::settextstyle(20, 0, "宋体");
+    ::settextstyle(25, 0, "微软雅黑", 0,0,550,0,0,0);
+    
     //创建功能的按钮
     menu_btns.push_back(new PushButton("查看工资信息"));
     menu_btns.push_back(new PushButton("添加工资信息"));
@@ -36,16 +44,19 @@ Mangerment::Mangerment()
     menu_btns.push_back(new PushButton("查找工资信息"));
     menu_btns.push_back(new PushButton("统计工资信息"));
     menu_btns.push_back(new PushButton("退出系统"));
-
+    cPushButton = new CirclePushButton("SAVE", 0, 0, 40);
     //设置每个按钮的位置
     for (int i = 0; i < menu_btns.size(); i++) {
         menu_btns[i]->setFixedSize(250, 50);
         int x = (Window::width() - menu_btns[i]->width()) / 2;
-        int vspace = (Window::height() - (int)menu_btns.size() * menu_btns[i]->height()) / 2 - 100;
+        int vspace = (Window::height() - (int)menu_btns.size() * menu_btns[i]->height()) / 2 ;
         int y = vspace + i * menu_btns[i]->height();
 
         menu_btns[i]->move(x, y);
     }
+    cPushButton->move(menu_btns[1]->x() + menu_btns[1]->width() + cPushButton->width() - 20, menu_btns[0]->y() + 20);
+    cPushButton->setBackgroundColor(COLORREF(RGB(253, 241, 255)));
+    cPushButton->setHoverColor(COLORREF(RGB(237, 236, 255)));
     //创建表格，用于展示数据
     m_table = new Table;
     m_salaryTable = new SalaryTable;
@@ -71,17 +82,30 @@ Mangerment::Mangerment()
     }
     
     //居中表格
-    m_table->move((Window::width() - m_table->width()) / 2, 250);
-    m_salaryTable->move((Window::width() - m_table->width()) / 2, 250);
+    m_table->move((Window::width() - m_table->width()) / 2, (Window::height()-m_table->height()) / 2);
+    m_salaryTable->move((Window::width() - m_table->width()) / 2, (Window::height() - m_table->height()) / 3);
 
+    //添加界面
+    addBtn = new PushButton("添加", 0, 0, 50, 30);
+    addEdit = new EditLine("点击此进行数据的添加");
+    addTable = new Table;
+    addTable->setRowCount(6);
+    addTable->setHeader(m_header);
+    addTable->move((Window::width() - addTable->width()) / 2, (Window::height() - addTable->height()) / 3 + 50);
+    addEdit->move((Window::width() - addEdit->width()) / 2, addTable->y() - 100);
+    addBtn->move(addEdit->x() + addEdit->width() + 5, addEdit->y());
     //删除界面
     delBtnOfID = new PushButton("删除", 0, 0, 50, 30);
     delEditOfID = new EditLine("点击此输入职工id进行搜索");
     delBtnOfName = new PushButton("删除", 0, 0, 50, 30);
     delEditOfName = new EditLine("点击此输入职工姓名进行搜索");
+    //confirmBtn = new PushButton("确认", 0, 0, 50, 30);
+    //cancelBtn = new PushButton("取消", 0, 0, 50, 30);
     delTable = new Table;
     delTable->setRowCount(6);
     delTable->setHeader(m_header);
+    //confirmBtn->move(Window::width() / 2 - 2 * confirmBtn->width(), (Window::height() - confirmBtn->height()) / 8);
+    //cancelBtn->move(Window::width() / 2 + cancelBtn->width(), confirmBtn->y());
     delTable->move((Window::width() - delTable->width()) / 2, (Window::height() - delTable->height()) / 3 + 50);
     delEditOfID->move((Window::width() - delEditOfID->width()) / 2 , delTable->y() - 100);
     delBtnOfID->move(delEditOfID->x() + delEditOfID->width() + 5, delEditOfID->y());
@@ -121,8 +145,8 @@ Mangerment::Mangerment()
     sort_btns.push_back(new PushButton("根据总工资排序"));
     for (int i = 0; i < sort_btns.size(); i++) {
         sort_btns[i]->setFixedSize(140, 30);
-        int y = 20 + 2 * i * sort_btns[i]->height();
-        int x = Window::width() / 2 + sort_btns[i]->width();
+        int y = m_table->y() + 2 * i * sort_btns[i]->height() - m_table->m_gridH;
+        int x = m_table->x()+ m_table->m_gridW * m_table->m_cols + 20;
 
         sort_btns[i]->move(x, y);
     }
@@ -131,16 +155,13 @@ Mangerment::Mangerment()
 
 void Mangerment::run()
 {
-    cout << "测试1" << endl;
     int op = MENU;
     //由于画面较复杂时，画面会闪烁
     //使用BeginBatchDraw();FlushBatchDraw();EndBatchDraw();这三个函数的批量绘图模式即可解决
     Window::beginDraw();
     while (true) {
-        //qsort(&vec_staff[0], vec_staff.size(), sizeof(vec_staff[0]), compare);
         updateTableData();
         updataSalaryTableData();
-        cout << "测试2" << endl;
         Window::clear();
         drawBackground();
         
@@ -157,7 +178,7 @@ void Mangerment::run()
                     break;
                 }
                 break;
-            default:				//其他的都是鼠标消息了
+            default:				//鼠标消息
                 event_loop();
                 break;
             }
@@ -173,22 +194,27 @@ void Mangerment::run()
         {
         case Mangerment::DISPLAY:
             display();
+            background = 0;
             break;
         case Mangerment::ADD:
+            background = 1;
             //添加新的数据后更新表格并保存到文件
             add();
-            op = MENU;
             break;
         case Mangerment::ERASE: 
+            background = 2;
             erase();
             break;
         case Mangerment::MODIFY:
+            background = 5;
             modify();
             break;
         case Mangerment::SEARCH:
+            background = 6;
             search();
             break;
         case Mangerment::STATISTICS:
+            background = 4;
             statistics();
             break;
         case Mangerment::EXIT:
@@ -197,7 +223,9 @@ void Mangerment::run()
             exit(0);
             break;
         case Mangerment::MENU:
+            background = 3;
             op = menu();
+            //Window::flushDraw();
             break;
         default: 
             break;
@@ -209,6 +237,11 @@ void Mangerment::run()
 //菜单
 int Mangerment::menu()
 {
+    cPushButton->show();
+    if (cPushButton->is_clicked()) {
+        saveFile("./Images/information.txt");
+        cout << "保存成功" << endl;
+    }
     for (int i = 0; i < menu_btns.size(); i++) {
         menu_btns[i]->show();
         //将当前信息同步到菜单按钮
@@ -221,37 +254,66 @@ int Mangerment::menu()
 //显示数据
 void Mangerment::display()
 {
+    sort(vec_staff.begin(), vec_staff.end());
     m_table->show();
 }
 //添加数据
 void Mangerment::add()
 {
-    Empoyee tmp;
+    addBtn->show();
+    addEdit->show();
+    addTable->show();
+
+    static Empoyee tmp;
     int count = 0;
     char buf[1024] = { 0 };
+    string text;
     memset(buf, 0, 1024);
     stringstream ss(buf);
 
     const char* str[] = { "请输入ID号","请输入姓名","请输入基本工资",
         "请输入职务工资","请输入津贴","请输入医疗保险","请输入公积金" };
     
-    for (int i = 0; i < 7; i++) {
-        memset(buf, 0, 1024);
-        if (!InputBox(buf, 1024, str[i], "添加新记录", NULL, 0, 0, false))
-            return;
-        if (i > 1) {
-            count += atoi(buf);
+    if (addEdit->is_clicked() && !addEdit->flag) {
+        for (int i = 0; i < 7; i++) {
+            memset(buf, 0, 1024);
+            if (!InputBox(buf, 1024, str[i], "添加新记录", NULL, 0, 0, false))
+                return;
+            text += (buf + (string)" ");
+            if (i > 1) {
+                count += atoi(buf);
+            }
+            ss << buf << " ";
         }
-        ss << buf << " ";
+        addEdit->set_textContent(text);
+        addEdit->flag = true;
+        ss << string(to_string(count)) << " ";
+        //将数据分割传进临时对象
+        ss >> tmp.id >> tmp.name >> tmp.salary1 >> tmp.salary2 >>
+            tmp.salary3 >> tmp.salary4 >> tmp.salary5 >> tmp.salary6;
+        addTable->insertData(tmp.formateInfo());
+        addTable->set_status(true);
     }
-    ss << string(to_string(count)) << " ";
-    //将数据分割传进临时对象
-    ss >> tmp.id >> tmp.name >> tmp.salary1 >> tmp.salary2 >>
-        tmp.salary3 >> tmp.salary4 >> tmp.salary5 >> tmp.salary6;
-    vec_staff.push_back(tmp);
-    updateTableData();
-    updataSalaryTableData();
-    saveFile("./Images/information.txt");
+    if (addBtn->is_clicked() && addTable->get_status()) {
+        vec_staff.push_back(tmp);
+        updateTableData();
+        updataSalaryTableData();
+        addTable->set_status(false);
+        addTable->clear();
+        saveFile("./Images/information.txt");
+    }
+
+    if (Window::hasMsg()) {
+        m_msg = Window::getMsg();
+        if (m_msg.message == WM_KEYDOWN)
+            if (m_msg.vkcode == VK_SPACE) {
+                addTable->clear();
+                addTable->set_status(false);
+                addEdit->flag = false;
+                addEdit->set_textContent("点击此进行数据的添加");
+                Sleep(200);
+            }
+    }
 }
 //更新表格
 void Mangerment::updateTableData()
@@ -329,6 +391,24 @@ void Mangerment::statistics()
         break;
     }
 }
+
+
+//inline  bool Mangerment::getChoice()
+//{
+//    int n = 10;
+//    while (n) {
+//        Sleep(200);
+//        cout << "已进入线程" << endl;
+//        confirmBtn->show();
+//        confirmBtn->event_loop(Window::getMsg());
+//        if (confirmBtn->is_clicked())
+//            return true;
+//        else if (cancelBtn->is_clicked())
+//            return false;
+//        n--;
+//    }
+//}
+
 //删除数据
 void Mangerment::erase()
 {
@@ -337,13 +417,28 @@ void Mangerment::erase()
     delTable->show();
     delBtnOfName->show();
     delEditOfName->show();
+    //confirmBtn->show();
+    //cancelBtn->show(); 
+    //bool confirmFlag = false;
+    //if (!confirmBtn->is_clicked() && !confirmBtn->getBtnClicked()) {
+    //    
+    //    cout << "还未确认" << endl;
+    //    cout << confirmBtn->getBtnClicked() << endl;
+    //}
+    //else if(confirmBtn->is_clicked() && !confirmBtn->getBtnClicked()) {
+    //    confirmBtn->setBtnClicked(true);
+    //    Sleep(200);
+    //    cout << "已确认" << endl;
+    //    cout << confirmBtn->getBtnClicked() << endl;
+    //}
+    
     std::string tmp;
     std::vector<Empoyee>::iterator it = vec_staff.end();
 
     //按ID删除
     
     if (delEditOfID->is_clicked() && delEditOfID->flag == false) {
-        tmp = delEditOfID->getDelTextInput();
+        tmp = delEditOfID->getDelIDInput();
         delEditOfID->set_textContent(tmp);
         Sleep(1000);
         if (tmp.empty())
@@ -378,7 +473,7 @@ void Mangerment::erase()
     //按姓名删除
     
     if (delEditOfName->is_clicked() && delEditOfName->flag == false) {
-        tmp = delEditOfName->getDelTextInput();
+        tmp = delEditOfName->getDelNameInput();
         delEditOfName->set_textContent(tmp);
         Sleep(1000);
         if (tmp.empty())
@@ -402,27 +497,36 @@ void Mangerment::erase()
             delTable->set_status(true);
         }
     }
-    if (delBtnOfName->is_clicked()) {
+    
+    if (delBtnOfName->is_clicked()){
+        cout << "多线程测试进入！" << endl;
+        /*future<bool> ret = async(launch::async, Mangerment::getChoice);
+        cout << "这是多线程测试：" << ret.get() << endl;*/
+
         Empoyee empoyee;
         std::stringstream stream;
-        tmp = delEditOfID->getDelTextInput();
+        tmp = delEditOfID->getDelIDInput();
         stream << tmp;
         stream >> empoyee.id;
         it = find(vec_staff.begin(), vec_staff.end(), empoyee);
-        if (it != vec_staff.end()) {
+        //settextstyle(50, 0, "华文仿宋", 0, 0, 500, 0, 0, 0);
+        //outtextxy(confirmBtn->x(), confirmBtn->y() - 100, "请点击确认按键");
+        //if (confirmBtn->is_clicked()) confirmFlag = true;
+        //::settextstyle(20, 0, "宋体");
+        if (it != vec_staff.end() ) {
+            Sleep(200);
             vec_staff.erase(it);
             delTable->clear();
             updateTableData();
             updataSalaryTableData();
         }
-        
     }
-
-    //按两次Esc即可退出该模块
+    //按空格即清空当前编辑栏
+    
     if (Window::hasMsg()) {
         m_msg = Window::getMsg();
-        if(m_msg.message == WM_KEYDOWN)
-            if (m_msg.vkcode == VK_ESCAPE) {
+        if (m_msg.message == WM_KEYDOWN)
+            if (m_msg.vkcode == VK_SPACE) {
                 delTable->clear();
                 delTable->set_status(false);
                 delEditOfID->flag = false;
@@ -433,6 +537,7 @@ void Mangerment::erase()
             }    
     }
 }
+
 //修改数据
 void Mangerment::modify()
 {
@@ -607,11 +712,11 @@ int Mangerment::getAllSalary(Empoyee& empoyee)
 //获取修改选项
 int Mangerment::getModifyOption()
 {
-    for (int i = 0; i < sort_btns.size(); i++) {
-        sort_btns[i]->show();
+    for (int i = 0; i < option_btns.size(); i++) {
+        option_btns[i]->show();
         //将当前信息同步到菜单按钮
-        sort_btns[i]->event_loop(m_msg);
-        if (sort_btns[i]->is_clicked())
+        option_btns[i]->event_loop(m_msg);
+        if (option_btns[i]->is_clicked())
             return i;
     }
     return -1;
@@ -653,7 +758,7 @@ void Mangerment::search()
     if (Window::hasMsg()) {
         m_msg = Window::getMsg();
         if (m_msg.message == WM_KEYDOWN)
-            if (m_msg.vkcode == VK_ESCAPE) {
+            if (m_msg.vkcode == VK_SPACE) {
                 searchTable->clear();
                 searchTable->set_status(false);
                 searchEdit->flag = false;
@@ -666,7 +771,15 @@ void Mangerment::search()
 //绘制背景
 void Mangerment::drawBackground()
 {
-    ::putimage(0, 0, &m_bk);
+    int i[] = { 7,12,13,14,15,17,18 };
+    //for (int k = 0; k < menu_btns.size(); k++) {
+    //    if (menu_btns[k]->is_clicked() && !menu_btns[k]->was_clicked()) {
+    //        background = rand() % 7;
+    //        menu_btns[k]->flag = true;
+    //        break;
+    //    }
+    //}
+    ::putimage(0, 0, &m_bks[i[background]]);
 }
 //监听事件同步
 void Mangerment::event_loop()
@@ -675,10 +788,17 @@ void Mangerment::event_loop()
     m_salaryTable->event_loop(m_msg);
     delTable->event_loop(m_msg);
 
+    addBtn->event_loop(m_msg);
+    addTable->event_loop(m_msg);
+    addEdit->event_loop(m_msg);
+
     delEditOfID->event_loop(m_msg);
     delBtnOfID->event_loop(m_msg);
     delEditOfName->event_loop(m_msg);
     delBtnOfName->event_loop(m_msg);
+    //confirmBtn->event_loop(m_msg);
+    //cancelBtn->event_loop(m_msg);
+    cPushButton->event_loop(m_msg);
 
     searchBtn->event_loop(m_msg);
     searchEdit->event_loop(m_msg);

@@ -12,9 +12,9 @@ public:
 	//设置控件的宽和高
 	void setFixedSize(int w, int h);
 	//移动控件的位置
-	void move(int x, int y);
+	virtual void move(int x, int y);
 	//显示控件
-	virtual void show() = 0;
+	virtual void show();
 
 protected:
 	int m_x;

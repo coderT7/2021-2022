@@ -79,7 +79,7 @@ void Table::drawTableGrid()
 
 void Table::drawButton()
 {
-	m_preBtn->move(m_x, m_h + 425);
+	m_preBtn->move(m_x, m_h + 325);
 	m_nextBtn->move(m_preBtn->x() + m_preBtn->width(), m_preBtn->y());
 	m_firstBtn->move(m_nextBtn->x() + m_nextBtn->width(), m_nextBtn->y());
 	m_lastBtn->move(m_firstBtn->x() + m_firstBtn->width(), m_firstBtn->y());
@@ -135,7 +135,7 @@ void Table::drawHeader()
 		line(m_x + i * m_gridW, m_y - 30, m_x + i * m_gridW, m_y);
 	}
 	::setlinestyle(PS_SOLID, 1);
-
+	
 	//分割表头数据
 	auto headers = split(m_header);
 	for (int i = 0; i < headers.size(); i++) {

@@ -17,7 +17,8 @@ public:
     bool textChange();
     bool textOfNameChange();
     bool textOfSearchChange();
-    std::string getDelTextInput();
+    std::string getDelIDInput();
+    std::string getDelNameInput();
     std::string getSearchTextInput();
     std::string getChooseModifyTextInput();
     std::string getModifyTextInput();

@@ -1,11 +1,12 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 #include"Mangerment.h"
 #include"Window.h"
-
+#include<ctime>
 int main()
 {
+	srand((unsigned int)time(nullptr));
 	//创建窗口
-	Window window(845,1350,EW_SHOWCONSOLE);//（测试完毕后记得将关闭的按钮去掉）
+	Window window(1024,1024,EW_NOCLOSE);
 	//设置窗口标题
 	window.setWindowTitle("职工管理系统");
 	//实例化管理对象

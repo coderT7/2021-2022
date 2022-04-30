@@ -1,7 +1,7 @@
 #include "PushButton.h"
 
 PushButton::PushButton(const std::string& text, int x, int y, int w, int h)
-	:BasicWidget(x, y, w, h), m_text(text)
+	:BasicWidget(x, y, w, h), m_text(text), m_flag((char*)""), flag(false)
 {
 
 }
@@ -10,7 +10,8 @@ void PushButton::show()
 {
 	::setfillcolor(cur_c);
 	//绘制圆角矩形作为按钮
-	::fillroundrect(m_x, m_y, m_x + m_w, m_y + m_h, 20, 20);
+	//::fillroundrect(m_x, m_y, m_x + m_w, m_y + m_h, 20, 20);
+	::roundrect(m_x, m_y, m_x + m_w, m_y + m_h, 20, 20);
 	settextcolor(BLACK);
 	int x = m_x + (m_w - textwidth(m_text.c_str())) / 2;
 	int y = m_y + (m_h - textheight(m_text.c_str())) / 2;
@@ -19,8 +20,10 @@ void PushButton::show()
 //监听鼠标消息
 bool PushButton::is_in()
 {
-	if (m_msg.x >= m_x && m_msg.x <= m_x + m_w && m_msg.y >= m_y && m_msg.y <= m_y + m_h)
+	if (m_msg.x > m_x && m_msg.x < m_x + m_w && m_msg.y > m_y && m_msg.y < m_y + m_h) {
 		return true;
+	}
+		
 	return false;
 }
 
@@ -33,14 +36,28 @@ bool PushButton::is_clicked()
 	return false;
 }
 
+bool PushButton::was_clicked()
+{
+	return flag;
+}
+
+
 void PushButton::event_loop(const ExMessage& msg)
 {
 	this->m_msg = msg;
-	if (!is_in()) {
+	char tmp[20] = { 0 };
+	if (is_in()) {
 		cur_c = normal_c;
+		m_flag = (char*)"○";
 	}
-	else
+	else {
 		cur_c = hover_c;
+		m_flag = (char*)"";
+	}
+	sprintf_s(tmp, "%s", m_flag);
+	//(((this->x() - textwidth(m_text.c_str())) / 2) - 20, ((this->y() - textheight(m_text.c_str())) / 2), m_flag);
+	outtextxy(((this->width() - textwidth(m_text.c_str())) / 2) + this->x() - 35,
+		((this->height() - textheight(m_text.c_str())) / 2) + this->y() - 3, m_flag);
 }
 
 void PushButton::setBackgroundColor(COLORREF color)

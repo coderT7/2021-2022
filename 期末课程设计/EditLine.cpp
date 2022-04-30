@@ -70,14 +70,25 @@ bool EditLine::textOfSearchChange()
 	return false;
 }
 
-std::string EditLine::getDelTextInput()
+std::string EditLine::getDelIDInput()
 {
 	char buf[1024] = { 0 };
 	std::stringstream ss(buf);
 
-	InputBox(buf, 20, "请输入要删除的ID/姓名");
+	InputBox(buf, 20, "请输入要删除的ID");
 	ss << buf;
 	
+	return ss.str();
+}
+
+std::string EditLine::getDelNameInput()
+{
+	char buf[1024] = { 0 };
+	std::stringstream ss(buf);
+
+	InputBox(buf, 20, "请输入要删除的姓名");
+	ss << buf;
+
 	return ss.str();
 }
 

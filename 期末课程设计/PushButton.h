@@ -10,21 +10,25 @@ public:
     PushButton(const std::string& text = "PushButton", int x = 0, int y = 0, int w = 100, int h = 30);
     void show()override;
 
-    bool is_in();
-    bool is_clicked();
-
-    void event_loop(const ExMessage& msg);
+    virtual bool is_in();
+    virtual bool is_clicked();
+    bool was_clicked();
+    virtual void event_loop(const ExMessage& msg);
 
     void setBackgroundColor(COLORREF color);
     void setHoverColor(COLORREF color);
-private:
+    bool flag;
+protected:
     std::string m_text;
     ExMessage m_msg;
 
-private:
+
+protected:
     //按钮的颜色变换
     COLORREF cur_c = RGB(161, 217, 252);
     COLORREF normal_c = RGB(161, 217, 252);
     COLORREF hover_c = RGB(98, 140, 224);
+    //标识符
+    char* m_flag;
 };
 

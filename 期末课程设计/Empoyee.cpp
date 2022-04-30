@@ -33,7 +33,7 @@ std::string Empoyee::formateInfoOfAverage()
 
 bool Empoyee::operator==(const Empoyee& right) const
 {
-	return (!(this->name.compare(right.name))) || (this->id == right.id);
+	return this->id == right.id;
 }
 
 bool Empoyee::operator>(const Empoyee& right) const

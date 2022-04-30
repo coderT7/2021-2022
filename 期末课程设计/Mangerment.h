@@ -6,6 +6,7 @@
 #include"EditLine.h"
 #include"Table.h"
 #include"SalaryTable.h"
+#include"CirclePushButton.h"
 class Mangerment
 {
 	enum Option {
@@ -39,6 +40,7 @@ public:
 	void updataSalaryTableData();
 	void statistics();
 	void erase();
+	//inline static bool getChoice();
 	void modify();
 	int getAllSalary(Empoyee& empoyee);
 	int getModifyOption();
@@ -50,19 +52,27 @@ public:
 	//读、写文件
 	void readFile(const std::string& fileName);
 	void saveFile(const std::string& fileName);
-
+	
 private://主界面的相关属性
-	IMAGE m_bk;
+	int background = 3;
+	std::vector<IMAGE> m_bks;
 	ExMessage m_msg;
 	std::vector<PushButton*> menu_btns;
+	CirclePushButton* cPushButton;
 private://数据的相关属性
 	std::string m_header;
 	std::vector<Empoyee> vec_staff;
 private://表格
 	Table* m_table;
 	SalaryTable* m_salaryTable;
+public://添加数据界面
+	PushButton* addBtn;
+	EditLine* addEdit;
+	Table* addTable;
 public://删除数据页面
 	PushButton* delBtnOfID;
+	//inline static PushButton* confirmBtn;
+	//inline static PushButton* cancelBtn;
 	Table* delTable;
 	EditLine* delEditOfID;
 	EditLine* delEditOfName;

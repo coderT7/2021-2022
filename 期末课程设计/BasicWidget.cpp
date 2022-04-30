@@ -41,3 +41,7 @@ void BasicWidget::move(int x, int y)
     this->m_x = x;
     this->m_y = y;
 }
+
+void BasicWidget::show()
+{
+}
