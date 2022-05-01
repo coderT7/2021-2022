@@ -2,6 +2,7 @@
 class BasicWidget
 {
 public:
+	BasicWidget();
 	BasicWidget(int x, int y, int w, int h);
 	//增加虚析构，防止子类对象有成员是在堆上创建时需要父类释放
 	virtual ~BasicWidget();

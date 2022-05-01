@@ -6,9 +6,9 @@ Table::Table(int row, int col)
 	m_curPage(0), m_maxPage(0), m_extraData(0), m_flag(false)
 {
 	m_preBtn = new PushButton("��һҳ");
-    m_nextBtn = new PushButton("��һҳ");
-    m_firstBtn = new PushButton("��ҳ");
-    m_lastBtn = new PushButton("βҳ");
+	m_nextBtn = new PushButton("��һҳ");
+	m_firstBtn = new PushButton("��ҳ");
+	m_lastBtn = new PushButton("βҳ");
 }
 
 Table::~Table()

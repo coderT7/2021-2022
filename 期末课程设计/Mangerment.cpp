@@ -132,11 +132,20 @@ Mangerment::Mangerment()
     option_btns.push_back(new PushButton("修改公积金"));
 
     for (int i = 0; i < option_btns.size(); i++) {
-        option_btns[i]->setFixedSize(125, 30);
-        int y = searchTable->y() + 450;
-        int x = searchTable->x() + i * option_btns[i]->width() - 35;
-        
-        option_btns[i]->move(x, y);
+        option_btns[i]->setFixedSize(200, 30);
+        if (i < 4) {
+            int y = (((Window::height() - searchTable->m_h) / 2) + searchTable->m_h) + 
+                ((Window::height() - searchTable->m_h) / 4) - 100;
+            int x = searchTable->x() - 90 + i * (option_btns[i]->width() + 10);
+            option_btns[i]->move(x, y);
+        }
+        else {
+            int y = (((Window::height() - searchTable->m_h) / 2) + searchTable->m_h) + 
+                ((Window::height() - searchTable->m_h) / 4) - 50;
+            int j = i - 4;
+            int x = searchTable->x() - 90 + j * (option_btns[i]->width() + 10);
+            option_btns[i]->move(x, y);
+        }
     }
 
     //排序界面
@@ -195,27 +204,33 @@ void Mangerment::run()
         case Mangerment::DISPLAY:
             display();
             background = 0;
+            Window::flushDraw();
             break;
         case Mangerment::ADD:
             background = 1;
             //添加新的数据后更新表格并保存到文件
             add();
+            Window::flushDraw();
             break;
         case Mangerment::ERASE: 
             background = 2;
             erase();
+            Window::flushDraw();
             break;
         case Mangerment::MODIFY:
             background = 5;
             modify();
+            Window::flushDraw();
             break;
         case Mangerment::SEARCH:
             background = 6;
             search();
+            Window::flushDraw();
             break;
         case Mangerment::STATISTICS:
             background = 4;
             statistics();
+            Window::flushDraw();
             break;
         case Mangerment::EXIT:
             //退出自动保存数据
@@ -225,7 +240,7 @@ void Mangerment::run()
         case Mangerment::MENU:
             background = 3;
             op = menu();
-            //Window::flushDraw();
+            Window::flushDraw();
             break;
         default: 
             break;
@@ -238,6 +253,7 @@ void Mangerment::run()
 int Mangerment::menu()
 {
     cPushButton->show();
+    
     if (cPushButton->is_clicked()) {
         saveFile("./Images/information.txt");
         cout << "保存成功" << endl;
@@ -280,14 +296,16 @@ void Mangerment::add()
             memset(buf, 0, 1024);
             if (!InputBox(buf, 1024, str[i], "添加新记录", NULL, 0, 0, false))
                 return;
-            tmp.id = atoi(buf);
-            if (find(vec_staff.begin(), vec_staff.end(), tmp) != vec_staff.end()) {
-                while (strcmp(buf,"我输错了")) {
-                    InputBox(buf, 1024, "该ID已存在，请输入“我输错了”后重新进行输入", "Error");
-                    Sleep(200);
+            if (!strcmp(str[i], "请输入ID号")) {
+                tmp.id = atoi(buf);
+                if (find(vec_staff.begin(), vec_staff.end(), tmp) != vec_staff.end()) {
+                    while (strcmp(buf, "我输错了")) {
+                        InputBox(buf, 1024, "该ID已存在，请输入“我输错了”后重新进行输入", "Error");
+                        Sleep(200);
+                    }
+                    Sleep(1000);
+                    goto flag;
                 }
-                Sleep(1000);
-                goto flag;
             }
             text += (buf + (string)" ");
             if (i > 1) {
