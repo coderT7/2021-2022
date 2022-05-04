@@ -2,8 +2,13 @@
 #include"Mangerment.h"
 #include"Window.h"
 #include<ctime>
+#include<graphics.h>
+#pragma comment(lib,"Winmm.lib")
 int main()
 {
+	mciSendString("open ./¼Î±ö.mp3 alias BGM", 0, 0, 0);
+	mciSendString("play BGM", 0, 0, 0);
+
 	srand((unsigned int)time(nullptr));
 	//´´½¨´°¿Ú
 	Window window(1024,1024,EW_SHOWCONSOLE|EW_NOCLOSE);

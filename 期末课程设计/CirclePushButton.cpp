@@ -21,9 +21,7 @@ bool CirclePushButton::is_in()
 {
 	if (m_Cmsg.x > (m_Cx - m_Cr) && m_Cmsg.x < (m_Cx + m_Cr) && m_Cmsg.y >(m_Cy - m_Cr) && m_Cmsg.y < (m_Cy + m_Cr)) {
 		return true;
-		std::cout << "已经进入目标" << std::endl;
 	}
-
 	return false;
 }
 

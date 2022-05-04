@@ -124,5 +124,3 @@ std::string EditLine::getModifyTextInput()
 
 	return ss.str();
 }
-
-

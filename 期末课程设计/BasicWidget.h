@@ -1,4 +1,6 @@
 #pragma once
+
+//基础窗口类也应可以实例化对象，故不作纯虚类
 class BasicWidget
 {
 public:

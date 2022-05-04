@@ -2,12 +2,13 @@
 #include "PushButton.h"
 #include<vector>
 #include<iostream>
+//Ô²ÐÎ°´Å¥
 class CirclePushButton :
     public PushButton
 {
 public:
     CirclePushButton(const std::string & text, int x, int y, int r);
-
+    
     void show()override;
     bool is_in()override;
     bool is_clicked() override;

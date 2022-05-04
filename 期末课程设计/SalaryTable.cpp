@@ -1,6 +1,6 @@
 #include "SalaryTable.h"
 #include<iostream>
-
+#include<string>
 SalaryTable::SalaryTable(int row, int col)
 	:Table(row, col), 
 	allSalary1(0.0), allSalary2(0.0), allSalary3(0.0), allSalary4(0.0), allSalary5(0.0)
@@ -78,6 +78,7 @@ void SalaryTable::clear()
 	this->lessThan2000Humans = 0;
 	this->between2000To3000Humans = 0;
 }
+
 void SalaryTable::statisticsSalary()
 {
 	char str[50] = { 0 };
@@ -116,16 +117,19 @@ void SalaryTable::statisticsSalary()
 void SalaryTable::statisticsHumans()
 {
 	char str_1[50] = { 0 };
-	sprintf_s(str_1, "工资在3000元以上占比 %lf%%", (1.0 * moreThan3000Humans / m_data.size()) * 100);
+	sprintf_s(str_1, "工资在3000元以上占比 %.3lf%%，共 %s 人", (1.0 * moreThan3000Humans / m_data.size()) * 100, 
+		std::to_string(moreThan3000Humans).c_str());
 	::outtextxy(m_preBtn->x() + m_gridW * m_cols / 2, m_preBtn->y() - 195, str_1);
 
 	char str_2[50] = { 0 };
-	sprintf_s(str_2, "工资在3000元以下2000元以上占比 %lf%%", (1.0 * between2000To3000Humans / m_data.size()) * 100);
+	sprintf_s(str_2, "工资在3000元以下2000元以上占比 %.3lf%%，共 %s 人", 
+		(1.0 * between2000To3000Humans / m_data.size()) * 100, std::to_string(between2000To3000Humans).c_str());
 	std::cout << between2000To3000Humans << std::endl;
 	::outtextxy(m_preBtn->x() + m_gridW * m_cols / 2, m_preBtn->y() - 195 + textheight(str_1) + 10, str_2);
 
 	char str_3[50] = { 0 };
-	sprintf_s(str_3, "工资在2000元以下占比 %lf%%", (1.0 * lessThan2000Humans / m_data.size()) * 100);
+	sprintf_s(str_3, "工资在2000元以下占比 %.3lf%%，共 %s 人", (1.0 * lessThan2000Humans / m_data.size()) * 100, 
+		std::to_string(lessThan2000Humans).c_str());
 	::outtextxy(m_preBtn->x() + m_gridW * m_cols / 2, m_preBtn->y() - 195 + 2 * textheight(str_1) + 20, str_3);
 }
 
@@ -169,6 +173,3 @@ void SalaryTable::event_loop(const ExMessage& msg)
 		m_curPage = m_maxPage;
 	}
 }
-
-
-

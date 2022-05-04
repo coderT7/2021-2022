@@ -9,8 +9,11 @@ PushButton::PushButton(const std::string& text, int x, int y, int w, int h)
 void PushButton::show()
 {
 	::setfillcolor(cur_c);
+#if 0
+	//发现按钮的另一种展现方式更为好看，故此废弃初版设计
 	//绘制圆角矩形作为按钮
 	//::fillroundrect(m_x, m_y, m_x + m_w, m_y + m_h, 20, 20);
+#endif
 	::roundrect(m_x, m_y, m_x + m_w, m_y + m_h, 20, 20);
 	settextcolor(BLACK);
 	int x = m_x + (m_w - textwidth(m_text.c_str())) / 2;
@@ -40,7 +43,6 @@ bool PushButton::was_clicked()
 {
 	return flag;
 }
-
 
 void PushButton::event_loop(const ExMessage& msg)
 {
