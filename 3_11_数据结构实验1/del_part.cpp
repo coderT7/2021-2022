@@ -11,7 +11,6 @@ void delete_all(const char* fileName) {
 		del_semicolon("final_2.txt");
 		blank_line("final_3.txt");
 	}
-
 }
 //彻底删除<>扩起来的内容
 void delete_non_visualization(const char* fileName)

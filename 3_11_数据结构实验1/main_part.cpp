@@ -203,20 +203,22 @@ static void del_dup_word(char* text_string)
 //去除重复单词
 void remove_duplicates(const char* fileName)
 {
+	cout << "去重进行" << endl;
 	FILE* pFile = fopen(fileName, "r");
 	if (pFile == NULL)
 	{
 		perror("Error opening file");
 		return;
 	}
+	cout << "去重进行2" << endl;
 	//获取文件的总字节大小
 	fseek(pFile, 0, SEEK_END);
 	int fileSize = ftell(pFile);
 	fseek(pFile, 0, SEEK_SET);
 	//开辟足够的空间（之前老是越界，烦死了，摆烂了，你还能越过整个文件？？）
 	char* tmp = (char*)malloc(sizeof(char) * fileSize);
-
-	while (fgets(tmp, fileSize, pFile) != NULL)
+	cout << "去重进行3" << endl;
+	while (fgets(tmp, fileSize, pFile) != nullptr)
 	{
 		del_dup_word(tmp);
 	}
@@ -225,7 +227,9 @@ void remove_duplicates(const char* fileName)
 		cout << it << endl;
 	}
 #endif
+
 	cout << "去重完成！保存至文件delWord.txt中" << endl;
+	system("pause");
 }
 
 //统计单词
@@ -302,10 +306,14 @@ int get_word_num(const char* fileName)
 		remove_duplicates("word.txt");
 		about_seqList();
 	}
-	else {
-		cout << "输入错误！" << endl;
+	else if (choose == 0) {
+		return sum;
 	}
-	return sum;
+	else {
+		cout << "输入有误！" << endl;
+		system("pause");
+		return sum;
+	}
 }
 //阅读文件
 void read_text(const char* fileName)

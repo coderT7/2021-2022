@@ -138,9 +138,20 @@ void inside_floder() {
 		break;
 		case getWord:
 		{
+			//获取单词应是对删除超链接后的文件进行操作
 			//单词文件是以追加方式进行的，为了提高复用性，每次获取前先将原有文件删除
 			remove("word.txt");
-			int ret = get_word_num(str.c_str());
+			int ret = 0;
+			if (str.compare("chrome.txt")) {
+				ret = get_word_num("chrome_final.txt");
+			}
+			else if (str.compare("firefox.txt")) {
+				ret = get_word_num("final_1.txt");
+			}
+			else {
+				cout << "该文件不存在" << endl;
+				return;
+			}				
 			cout << "共捕获到" << ret << "个单词" << endl;
 			system("pause");
 		}
