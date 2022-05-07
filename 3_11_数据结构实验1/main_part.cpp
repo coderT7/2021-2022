@@ -1,6 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
 #include"main.h"
+#include"folder.h"
 #include"SeqList.h"
 
 
@@ -23,31 +24,7 @@ void menu()
 	cout << "|-----      0. EXIT          ------|" << endl;
 	cout << "------------------------------------" << endl;
 }
-void _menu()
-{
-	cout << "------------------------------------" << endl;
-	cout << "|           文 件 处 理            |" << endl;
-	cout << "|                                  |" << endl;
-	cout << "|-----      1. SHOW TXT      ------|" << endl;
-	cout << "|-----      2. DEL  HYLINK   ------|" << endl;
-	cout << "|-----      3. GET  WORD     ------|" << endl;
-	cout << "|-----      4. DEL  DUP WORD ------|" << endl;
-	cout << "|-----      0. BACK          ------|" << endl;
-	cout << "------------------------------------" << endl;
-}
-void _menu_4() {
-	cout << "这是数据结构上机实验四的顺序表的菜单" << endl;
-	cout << "由于步骤与之前去重输出文件重复，故不打算将其写入该程序主体部分，所以独立出该菜单" << endl;
-	cout << "------------------------------------" << endl;
-	cout << "|          顺 序 表 相 关          |" << endl;
-	cout << "|                                  |" << endl;
-	cout << "|-----      1. FIND WORD     ------|" << endl;
-	cout << "|-----      2. SAVE WORD     ------|" << endl;
-	cout << "|-----      3. PRINT WORD    ------|" << endl;
-	cout << "|-----      4. DEL  DUP WORD ------|" << endl;
-	cout << "|-----      0. BACK          ------|" << endl;
-	cout << "------------------------------------" << endl;
-}
+
 static enum _Option {
 	Back,
 	FindWord,
@@ -312,8 +289,8 @@ int get_word_num(const char* fileName)
 	else {
 		cout << "输入有误！" << endl;
 		system("pause");
-		return sum;
 	}
+	return sum;
 }
 //阅读文件
 void read_text(const char* fileName)

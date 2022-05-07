@@ -1,7 +1,36 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
 #include"main.h"
-
+#include"folder.h"
+#include"SeqList.h"
+#include"singleList.h"
+void _menu()
+{
+	cout << "------------------------------------" << endl;
+	cout << "|           文 件 处 理            |" << endl;
+	cout << "|                                  |" << endl;
+	cout << "|-----      1. SHOW TXT      ------|" << endl;
+	cout << "|-----      2. DEL  HYLINK   ------|" << endl;
+	cout << "|-----      3. GET  WORD     ------|" << endl;
+	cout << "|-----      4. DEL  DUP WORD ------|" << endl;
+	cout << "|-----      5. 顺 序 表 相 关------|" << endl;
+	cout << "|-----      6. 单 链 表 相 关------|" << endl;
+	cout << "|-----      0. BACK          ------|" << endl;
+	cout << "------------------------------------" << endl;
+}
+void _menu_4() {
+	cout << "这是数据结构上机实验四的顺序表的菜单" << endl;
+	cout << "由于步骤与之前去重输出文件重复，故不打算将其写入该程序主体部分，所以独立出该菜单" << endl;
+	cout << "------------------------------------" << endl;
+	cout << "|          顺 序 表 相 关          |" << endl;
+	cout << "|                                  |" << endl;
+	cout << "|-----      1. FIND WORD     ------|" << endl;
+	cout << "|-----      2. SAVE WORD     ------|" << endl;
+	cout << "|-----      3. PRINT WORD    ------|" << endl;
+	cout << "|-----      4. DEL  DUP WORD ------|" << endl;
+	cout << "|-----      0. BACK          ------|" << endl;
+	cout << "------------------------------------" << endl;
+}
 //文件夹可以提前存在（目前题目没说不可以），就不麻烦创建文件夹了
 //留着下次用
 void create_floder()
@@ -83,6 +112,149 @@ void get_all_file_name(const string& dirPath)
 	if (flag) {
 		cout << "该文件夹无文件！" << endl;
 	}
+}
+extern vector<string> wordArr;
+
+void seqList_work()
+{
+	FILE* pWord = fopen("word.txt", "r");
+	vector<string> tmpWord;
+	//Seqlist seqList;
+	//InitList(&seqList);
+	
+	int input = 0;
+	do {
+		system("cls");
+		seqList_menu();
+		cin >> input;
+		switch (input)
+		{
+		case SAVE: {
+			char tmp[1024] = { 0 };
+			while (fgets(tmp, 1024, pWord) != nullptr) {
+				tmpWord.push_back(tmp);
+			}
+			cout << "已将数据保存至顺序表L1中" << endl;
+			system("pause");
+		}
+			break;
+		case PRINT: {
+			//PrintSList(&seqList);
+			for (auto val : tmpWord) {
+				cout << val << endl;
+			}
+			cout << "打印完毕" << endl;
+			system("pause");
+		}
+			break;
+		case DELDUP: {
+			int count = 0;
+			set<string> del;
+			for (auto val : tmpWord) {
+				del.insert(val);
+			}
+			tmpWord.clear();
+			for (auto val : del) {
+				cout << val << endl;
+				tmpWord.push_back(val);
+				count++;
+			}
+			cout << "去重完毕" << endl;
+			cout << "剩余单词：" << count << endl;
+			system("pause");
+		}
+			break;
+		case BACK:
+			cout << "返回上一级" << endl;
+			system("pause");
+			return;
+			break;
+		default:
+			break;
+		}
+	} while (input);
+}
+
+void seqList_menu()
+{
+	cout << "------------------------------------" << endl;
+	cout << "|          顺 序 表 相 关          |" << endl;
+	cout << "|                                  |" << endl;
+	cout << "|-----      1. SAVE          ------|" << endl;
+	cout << "|-----      2. PRINT         ------|" << endl;
+	cout << "|-----      3. DEL  DUP WORD ------|" << endl;
+	cout << "|-----      0. BACK          ------|" << endl;
+	cout << "------------------------------------" << endl;
+}
+
+void singleList_work()
+{
+	FILE* pWord = fopen("word.txt", "r");
+	list<string> tmpWord;
+
+	int input = 0;
+	do {
+		system("cls");
+		singleList_menu();
+		cin >> input;
+		switch (input)
+		{
+		case SAVE: {
+			char tmp[1024] = { 0 };
+			while (fgets(tmp, 1024, pWord) != nullptr) {
+				tmpWord.push_back(tmp);
+			}
+			cout << "已将数据保存至单链表L2中" << endl;
+			system("pause");
+		}
+				 break;
+		case PRINT: {
+			//PrintSList(&seqList);
+			for (auto val : tmpWord) {
+				cout << val << endl;
+			}
+			cout << "打印完毕" << endl;
+			system("pause");
+		}
+				  break;
+		case DELDUP: {
+			int count = 0;
+			set<string> del;
+			for (auto val : tmpWord) {
+				del.insert(val);
+			}
+			tmpWord.clear();
+			for (auto val : del) {
+				cout << val << endl;
+				tmpWord.push_back(val);
+				count++;
+			}
+			cout << "去重完毕" << endl;
+			cout << "剩余单词：" << count << endl;
+			system("pause");
+		}
+				   break;
+		case BACK:
+			cout << "返回上一级" << endl;
+			system("pause");
+			return;
+			break;
+		default:
+			break;
+		}
+	} while (input);
+}
+
+void singleList_menu()
+{
+	cout << "------------------------------------" << endl;
+	cout << "|          单 链 表 相 关          |" << endl;
+	cout << "|                                  |" << endl;
+	cout << "|-----      1. SAVE          ------|" << endl;
+	cout << "|-----      2. PRINT         ------|" << endl;
+	cout << "|-----      3. DEL  DUP WORD ------|" << endl;
+	cout << "|-----      0. BACK          ------|" << endl;
+	cout << "------------------------------------" << endl;
 }
 
 void inside_floder() {
@@ -172,6 +344,12 @@ void inside_floder() {
 			system("pause");
 			break;
 		}
+		case seqListWork:
+			seqList_work();
+			break;
+		case singleListWork:
+			singleList_work();
+			break;
 		case Exit:
 			cout << "已返回上一层" << endl;
 			system("pause");

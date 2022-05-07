@@ -27,7 +27,7 @@ enum CHOICE
 	delFile,
 	readFolder,
 	removeFile,
-	textFour
+	textFour,
 };
 
 void delete_all(const char* fileName);
@@ -42,10 +42,6 @@ void blank_line(const char* fileName);
 
 void menu();
 
-void _menu();
-
-void _menu_4();
-
 void about_seqList();
 
 void hyperlink_delete(const char* fileName);
@@ -58,10 +54,5 @@ void remove_duplicates(const char* fileName);
 
 void delete_file(const char* fileName);
 
-void inside_floder();
 
-void create_floder();
 
-void remove_file(const char* fileName);
-
-void get_all_file_name(const string& strPath);
