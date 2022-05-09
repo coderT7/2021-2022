@@ -7,7 +7,7 @@
 class Table :
     public BasicWidget
 {
-    friend class Mangerment;
+    friend class Management;
 public:
     Table(int row = 0, int col = 0);
     ~Table();

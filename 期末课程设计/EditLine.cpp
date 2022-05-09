@@ -75,7 +75,7 @@ std::string EditLine::getDelIDInput()
 	char buf[1024] = { 0 };
 	std::stringstream ss(buf);
 
-	InputBox(buf, 20, "请输入要删除的ID");
+	InputBox(buf, 20, "请输入要删除的ID", 0, 0, 0, 0, false);
 	ss << buf;
 	
 	return ss.str();
@@ -86,7 +86,7 @@ std::string EditLine::getDelNameInput()
 	char buf[1024] = { 0 };
 	std::stringstream ss(buf);
 
-	InputBox(buf, 20, "请输入要删除的姓名");
+	InputBox(buf, 20, "请输入要删除的姓名", 0, 0, 0, 0, false);
 	ss << buf;
 
 	return ss.str();

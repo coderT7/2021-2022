@@ -99,7 +99,10 @@ void Table::drawButton()
 	sprintf_s(str_1, "当前人均工资为 %.2lf", 1.0 * SalaryTable::allSalary / m_data.size());
 	::outtextxy(m_lastBtn->x() + m_lastBtn->width() + 100, m_lastBtn->y() - 15, str_1);
 
-	
+	settextstyle(30, 0, "宋体");
+	::outtextxy(0, 0, "按下ESC返回上一层");
+	::outtextxy(0, 40, "按下空格清空输入框");
+	::settextstyle(25, 0, "微软雅黑", 0, 0, 550, 0, 0, 0);
 }
 
 void Table::drawTableData()
