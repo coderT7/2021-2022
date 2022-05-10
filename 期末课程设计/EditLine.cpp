@@ -119,7 +119,7 @@ std::string EditLine::getModifyTextInput()
 	char buf[1024] = { 0 };
 	std::stringstream ss(buf);
 
-	InputBox(buf, 20, "请输入要修改的信息");
+	InputBox(buf, 20, "请输入要修改的信息", "输入框", 0, 0, 0, false);
 	ss << buf;
 
 	return ss.str();

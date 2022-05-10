@@ -3,7 +3,8 @@
 #include"Window.h"
 #include<ctime>
 #include<graphics.h>
-#pragma comment(lib,"Winmm.lib")
+#pragma comment(lib,"Winmm.lib")\
+
 int main()
 {
 #if 0
