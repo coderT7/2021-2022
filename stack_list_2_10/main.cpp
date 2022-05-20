@@ -9,13 +9,11 @@ int main()
 	push(St, 10);
 	push(St, 20);
 	push(St, 30);
-	cout << top(St) << endl;
-	pop(St);
-	cout << top(St) << endl;
-	pop(St);
-	cout << top(St) << endl;
-	pop(St);
-	cout << top(St) << endl;
-	pop(St);
+	push(St, 40);
+	push(St, 50);
+	while (!empty(St)) {
+		cout << top(St) << " " << "栈空间的大小为：" << size(St);
+		pop(St);
+	}
 	return 0;
 }

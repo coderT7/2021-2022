@@ -1,49 +1,49 @@
 #define _CRT_SECURE_NO_WARNINGS 1
+
 #include"stack.h"
 
 void initStack(Stack& St)
 {
 	St.count = 0;
-	St.next = NULL;
-	St.val = 0;
+	St.head = St.tail = new StackNode;
 }
 int top(Stack& St)
 {
-	if (!empty(St))
+	if (St.count == 0)
 	{
 		cout << "栈中无数据" << endl;
 		return 0;
 	}
 	else
-		return St.next->val;
+		return St.head->next->val;
 }
-static Stack* buyNewNode(SDataType val)
+StackNode* buyNewNode(SDataType val)
 {
-	Stack* newnode = new Stack;
-	newnode->next = NULL;
-	newnode->count = 0;
+	StackNode* newnode = new StackNode;
+	newnode->next = nullptr;
 	newnode->val = val;
 	return newnode;
 }
 void push(Stack& St, SDataType val)
 {
-	Stack * newnode = buyNewNode(val);
-	Stack* tmp = St.next;
-	St.next = newnode;
-	newnode->next = tmp;
+	StackNode* newnode = buyNewNode(val);
+	StackNode* next = St.head->next;
+	St.head->next = newnode;
+	newnode->next = next;
 	St.count++;
 	cout << "插入" << val << "成功" << endl;
 }
 void pop(Stack& St)
 {
-	if (empty(St))
+	if (St.count != 0)
 	{
-		Stack* tmp = new Stack;
-		tmp = St.next;
-		St.next = St.next->next;
-		cout << "出栈成功，出栈的数据为：" << tmp->val << endl;
+		SDataType val = St.head->next->val;
+		StackNode* next = St.head->next->next;
+		free(St.head->next);
+		St.head->next = next;
+		cout << "出栈成功，出栈的数据为：" <<  val << endl;
 		St.count--;
-		free(tmp);
+
 	}
 	else
 	{
@@ -53,7 +53,7 @@ void pop(Stack& St)
 }
 bool empty(Stack St)
 {
-	return St.count;
+	return St.count == 0;
 }
 int size(Stack St)
 {

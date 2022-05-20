@@ -1,4 +1,5 @@
-#define _CRT_SECURE_NO_WARNINGS 1
+#pragma once
+
 #pragma once
 
 #include<cstdlib>
@@ -8,11 +9,16 @@ using namespace std;
 
 typedef int SDataType;
 
+typedef struct StackNode {
+	SDataType val;
+	struct StackNode* next;
+}StackNode;
+
 typedef struct Stack
 {
-	SDataType val;
 	int count;
-	struct Stack* next;
+	StackNode* tail;
+	StackNode* head;
 }Stack;
 
 void initStack(Stack& St);
