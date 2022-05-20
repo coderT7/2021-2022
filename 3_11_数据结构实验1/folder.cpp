@@ -4,6 +4,9 @@
 #include"folder.h"
 #include"SeqList.h"
 #include"singleList.h"
+#include<stack>
+
+using namespace std;
 void _menu()
 {
 	cout << "------------------------------------" << endl;
@@ -15,6 +18,7 @@ void _menu()
 	cout << "|-----      4. DEL  DUP WORD ------|" << endl;
 	cout << "|-----      5. 顺 序 表 相 关------|" << endl;
 	cout << "|-----      6. 单 链 表 相 关------|" << endl;
+	cout << "|-----      7. 链 式 栈 相 关------|" << endl;
 	cout << "|-----      0. BACK          ------|" << endl;
 	cout << "------------------------------------" << endl;
 }
@@ -257,6 +261,101 @@ void singleList_menu()
 	cout << "------------------------------------" << endl;
 }
 
+void stackList_menu()
+{
+	cout << "------------------------------------" << endl;
+	cout << "|          链 式 栈 相 关          |" << endl;
+	cout << "|                                  |" << endl;
+	cout << "|-----      1. CHECK         ------|" << endl;
+	cout << "|-----      2. PRINT         ------|" << endl;
+	cout << "|-----      0. BACK          ------|" << endl;
+	cout << "------------------------------------" << endl;
+}
+
+static void stack_clear(stack<char>& checkStack) {
+	while (!checkStack.empty()) {
+		checkStack.pop();
+	}
+}
+void stackList_work()
+{
+	FILE* pFile = fopen("chrome.txt", "r");
+	stack<char> checkStack;
+	int row = 0, col = 0;
+	bool flag = true;
+	int input = 0;
+	do {
+		system("cls");
+		stackList_menu();
+		cin >> input;
+		switch (input)
+		{
+		case 1: {
+			char tmp[1024] = { 0 };
+			while (fgets(tmp, 1024, pFile)) {
+				stack_clear(checkStack);
+				row++;
+				if(tmp[0] != '\n' || tmp[0] != '\0')
+				for (int i = 0; i < strlen(tmp); i++) {
+					switch (tmp[i]) {
+					case '<':
+					case '[':
+					case '(':
+					case '{':
+						checkStack.push(tmp[i]);
+						break;
+					case '>':
+					case ']':
+					case ')':
+					case '}': {
+						if (checkStack.empty()) {
+							flag = false;
+							cout << "第" << row << "行" << ",第" << i << "列不匹配" << endl;
+							cout << tmp << endl;
+						}
+						else {
+							char res = checkStack.top();
+							checkStack.pop();
+							if (tmp[i] == '>' && res != '<'
+								|| tmp[i] == ']' && res != '['
+								|| tmp[i] == ')' && res != '('
+								|| tmp[i] == '}' && res != '{') {
+								flag = false;
+								cout << "第" << row << "行" << ",第" << i << "列不匹配" << endl;
+								cout << tmp << endl;
+							}
+						}
+						break;
+					}
+					default:
+						break;
+					}
+				}
+			}
+			if (flag) {
+				cout << "全部括号匹配" << endl;
+			}
+			system("pause");
+		}
+				 break;
+		case 2: {
+			//...
+			system("pause");
+		}
+				  break;
+		case BACK:
+			cout << "返回上一级" << endl;
+			system("pause");
+			return;
+			break;
+		default:
+			break;
+		}
+	} while (input);
+}
+
+
+
 void inside_floder() {
 	string str;
 	int _input = 0,tmp = 0;
@@ -349,6 +448,9 @@ void inside_floder() {
 			break;
 		case singleListWork:
 			singleList_work();
+			break;
+		case stackListWork:
+			stackList_work();
 			break;
 		case Exit:
 			cout << "已返回上一层" << endl;
