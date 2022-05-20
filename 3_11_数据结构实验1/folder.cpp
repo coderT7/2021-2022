@@ -291,14 +291,19 @@ void stackList_work()
 		switch (input)
 		{
 		case 1: {
-			char tmp[1024] = { 0 };
-			while (fgets(tmp, 1024, pFile)) {
-				stack_clear(checkStack);
+			rewind(pFile);
+			char tmp[2048] = { 0 };
+			while (fgets(tmp, 2048, pFile)) {
+				//stack_clear(checkStack);
 				row++;
-				if(tmp[0] != '\n' || tmp[0] != '\0')
+				//if((tmp[0] != '\n') && (tmp[0] != '\0'))
 				for (int i = 0; i < strlen(tmp); i++) {
 					switch (tmp[i]) {
 					case '<':
+						if (tmp[i + 1] - '0' >= 0 && tmp[i + 1] - '0' <= 9)
+							break;
+						else
+							;
 					case '[':
 					case '(':
 					case '{':
@@ -331,6 +336,17 @@ void stackList_work()
 						break;
 					}
 				}
+				/*while (!checkStack.empty()) {
+					flag = false;
+					for (int i = 0; i < strlen(tmp); i++) {
+						char res = checkStack.top();
+						if (res == tmp[i]) {
+							cout << "第" << row << "行" << ",第" << i << "列不匹配" << endl;
+							cout << tmp << endl;
+						}
+					}
+					checkStack.pop();
+				}*/
 			}
 			if (flag) {
 				cout << "全部括号匹配" << endl;
