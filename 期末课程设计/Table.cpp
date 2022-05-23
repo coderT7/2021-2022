@@ -1,5 +1,6 @@
 #include "Table.h"
 #include"SalaryTable.h"
+#include"Window.h"
 #include<iostream>
 Table::Table(int row, int col)
 	:BasicWidget(0, 0, 0, 0), m_rows(row), m_cols(col),
@@ -79,7 +80,8 @@ void Table::drawTableGrid()
 
 void Table::drawButton()
 {
-	m_preBtn->move(m_x, m_h + 375);
+
+	m_preBtn->move((Window::width() - m_w) / 2, (Window::height() - m_h) / 5 + m_y + m_h);
 	m_nextBtn->move(m_preBtn->x() + m_preBtn->width(), m_preBtn->y());
 	m_firstBtn->move(m_nextBtn->x() + m_nextBtn->width(), m_nextBtn->y());
 	m_lastBtn->move(m_firstBtn->x() + m_firstBtn->width(), m_firstBtn->y());
@@ -143,8 +145,8 @@ void Table::drawHeader()
 	auto headers = split(m_header);
 	for (int i = 0; i < headers.size(); i++) {
 		int spaceH = (m_gridW - ::textwidth(headers[i].c_str())) / 2;
-		int spaceW = (30 - ::textheight(headers[i].c_str())) / 2;
-		::outtextxy(m_x + i * m_gridW+ spaceH, m_y - m_gridH + spaceW, headers[i].c_str());
+		int spaceW = (m_gridH - ::textheight(headers[i].c_str())) / 2;
+		::outtextxy(m_x + i * m_gridW + spaceH, m_y - m_gridH + spaceW, headers[i].c_str());
 	}
 }
 

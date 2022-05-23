@@ -1,5 +1,6 @@
 #include "SalaryTable.h"
 #include<iostream>
+
 #include<string>
 SalaryTable::SalaryTable(int row, int col)
 	:Table(row, col), 
@@ -92,45 +93,45 @@ void SalaryTable::statisticsSalary()
 
 	char str_2[50] = { 0 };
 	sprintf_s(str_2, "各类项工资平均值");
-	::outtextxy(m_preBtn->x(), m_preBtn->y() - 195, str_2);
+	::outtextxy(m_preBtn->x(), m_preBtn->y() - 190, str_2);
 
 	char str_3[50] = { 0 };
 	sprintf_s(str_3, "基本工资均值：%lf", 1.0 * allSalary1 / m_data.size());
-	::outtextxy(m_preBtn->x(), m_preBtn->y() - 195 + textheight(str_2) + 5, str_3);
+	::outtextxy(m_preBtn->x(), m_preBtn->y() - 190 + textheight(str_2) + 5, str_3);
 
 	char str_4[40] = { 0 };
 	sprintf_s(str_4, "职务工资均值：%lf", 1.0 * allSalary2 / m_data.size());
-	::outtextxy(m_preBtn->x(), m_preBtn->y() - 195 + 2 * textheight(str_3) + 10, str_4);
+	::outtextxy(m_preBtn->x(), m_preBtn->y() - 190 + 2 * textheight(str_3) + 10, str_4);
 
 	char str_5[50] = { 0 };
 	sprintf_s(str_5, "津贴均值：%lf", 1.0 * allSalary3 / m_data.size());
-	::outtextxy(m_preBtn->x(), m_preBtn->y() - 195 + 3 * textheight(str_4) + 15, str_5);
+	::outtextxy(m_preBtn->x(), m_preBtn->y() - 190 + 3 * textheight(str_4) + 15, str_5);
 
 	char str_6[60] = { 0 };
 	sprintf_s(str_6, "医疗保险均值：%lf", 1.0 * allSalary4 / m_data.size());
-	::outtextxy(m_preBtn->x(), m_preBtn->y() - 195 + 4 * textheight(str_5) + 20, str_6);
+	::outtextxy(m_preBtn->x(), m_preBtn->y() - 190 + 4 * textheight(str_5) + 20, str_6);
 
 	char str_7[70] = { 0 };
 	sprintf_s(str_7, "公积金均值：%lf", 1.0 * allSalary5 / m_data.size());
-	::outtextxy(m_preBtn->x(), m_preBtn->y() - 195 + 5 * textheight(str_6) + 25, str_7);
+	::outtextxy(m_preBtn->x(), m_preBtn->y() - 190 + 5 * textheight(str_6) + 25, str_7);
 }
 void SalaryTable::statisticsHumans()
 {
 	char str_1[50] = { 0 };
 	sprintf_s(str_1, "工资在3000元以上占比 %.3lf%%，共 %s 人", (1.0 * moreThan3000Humans / m_data.size()) * 100, 
 		std::to_string(moreThan3000Humans).c_str());
-	::outtextxy(m_preBtn->x() + m_gridW * m_cols / 2, m_preBtn->y() - 195, str_1);
+	::outtextxy(m_preBtn->x() + m_gridW * m_cols / 2, m_preBtn->y() - 190, str_1);
 
 	char str_2[50] = { 0 };
 	sprintf_s(str_2, "工资在3000元以下2000元以上占比 %.3lf%%，共 %s 人", 
 		(1.0 * between2000To3000Humans / m_data.size()) * 100, std::to_string(between2000To3000Humans).c_str());
-	std::cout << between2000To3000Humans << std::endl;
-	::outtextxy(m_preBtn->x() + m_gridW * m_cols / 2, m_preBtn->y() - 195 + textheight(str_1) + 10, str_2);
+	//std::cout << between2000To3000Humans << std::endl;
+	::outtextxy(m_preBtn->x() + m_gridW * m_cols / 2, m_preBtn->y() - 190 + textheight(str_1) + 10, str_2);
 
 	char str_3[50] = { 0 };
 	sprintf_s(str_3, "工资在2000元以下占比 %.3lf%%，共 %s 人", (1.0 * lessThan2000Humans / m_data.size()) * 100, 
 		std::to_string(lessThan2000Humans).c_str());
-	::outtextxy(m_preBtn->x() + m_gridW * m_cols / 2, m_preBtn->y() - 195 + 2 * textheight(str_1) + 20, str_3);
+	::outtextxy(m_preBtn->x() + m_gridW * m_cols / 2, m_preBtn->y() - 190 + 2 * textheight(str_1) + 20, str_3);
 }
 
 void SalaryTable::drawButton()

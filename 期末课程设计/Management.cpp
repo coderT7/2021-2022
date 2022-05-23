@@ -47,7 +47,7 @@ Management::Management()
     menu_btns.push_back(new PushButton("退出系统"));
     cPushButton = new CirclePushButton("SAVE", 0, 0, 40);
     //设置每个按钮的位置
-    for (int i = 0; i < menu_btns.size(); i++) {
+    for (int i = 0; i < (int)menu_btns.size(); i++) {
         menu_btns[i]->setFixedSize(250, 50);
         int x = (Window::width() - menu_btns[i]->width()) / 2;
         int vspace = (Window::height() - (int)menu_btns.size() * menu_btns[i]->height()) / 2 ;
@@ -62,10 +62,10 @@ Management::Management()
     m_table = new Table;
     m_salaryTable = new SalaryTable;
     //设置行列以及表头
-    m_table->setRowCount(16);
+    m_table->setRowCount(10);
     m_table->setHeader(m_header);
 
-    m_salaryTable->setRowCount(16);
+    m_salaryTable->setRowCount(10);
     m_salaryTable->setHeader(m_header);
     //将职工数据读入到表格中
     for (auto& val : vec_staff) {
@@ -84,8 +84,8 @@ Management::Management()
     }
     
     //居中表格
-    m_table->move((Window::width() - m_table->width()) / 2, (Window::height()-m_table->height()) / 2);
-    m_salaryTable->move((Window::width() - m_table->width()) / 2, (Window::height() - m_table->height()) / 3);
+    m_table->move((Window::width() - m_table->width()) / 2, (Window::height()- m_table->height()) / 3);
+    m_salaryTable->move((Window::width() - m_table->width()) / 2, (Window::height() - m_table->height()) / 3 - 35);
 
     //添加界面
     addBtn = new PushButton("添加", 0, 0, 50, 30);
@@ -93,7 +93,7 @@ Management::Management()
     addTable = new Table;
     addTable->setRowCount(6);
     addTable->setHeader(m_header);
-    addTable->move((Window::width() - addTable->width()) / 2, (Window::height() - addTable->height()) / 2);
+    addTable->move((Window::width() - addTable->width()) / 2, (Window::height() - addTable->height()) / 3);
     addEdit->move((Window::width() - addEdit->width()) / 2, addTable->y() - 100);
     addBtn->move(addEdit->x() + addEdit->width() + 5, addEdit->y());
     //删除界面
@@ -112,7 +112,7 @@ Management::Management()
     //confirmBtn->move(Window::width() / 2 - 2 * confirmBtn->width(), (Window::height() - confirmBtn->height()) / 8);
     //cancelBtn->move(Window::width() / 2 + cancelBtn->width(), confirmBtn->y());
 #endif
-    delTable->move((Window::width() - delTable->width()) / 2, (Window::height() - delTable->height()) / 3 + 50);
+    delTable->move((Window::width() - delTable->width()) / 2, (Window::height() - delTable->height()) / 3);
     delEditOfID->move((Window::width() - delEditOfID->width()) / 2 , delTable->y() - 100);
     delBtnOfID->move(delEditOfID->x() + delEditOfID->width() + 5, delEditOfID->y());
     delEditOfName->move(delEditOfID->x(), delEditOfID->y() - delEditOfID->height() - 10);
@@ -124,7 +124,7 @@ Management::Management()
     searchTable = new Table;
     searchTable->setRowCount(6);
     searchTable->setHeader(m_header + "\t平均工资");
-    searchTable->move((Window::width() - searchTable->width()) / 2, (Window::height() - searchTable->height()) / 3 + 50);
+    searchTable->move((Window::width() - searchTable->width()) / 2, (Window::height() - searchTable->height()) / 3);
     searchEdit->move((Window::width() - searchEdit->width()) / 2, searchTable->y() - 100);
     searchBtn->move(searchEdit->x() + searchEdit->width() + 5, searchEdit->y());
 
@@ -137,19 +137,19 @@ Management::Management()
     option_btns.push_back(new PushButton("修改医疗保险"));
     option_btns.push_back(new PushButton("修改公积金"));
     //设置每个按钮的对应位置
-    for (int i = 0; i < option_btns.size(); i++) {
+    for (int i = 0; i < (int)option_btns.size(); i++) {
         option_btns[i]->setFixedSize(200, 30);
         if (i < 4) {
             int y = (((Window::height() - searchTable->m_h) / 2) + searchTable->m_h) + 
-                ((Window::height() - searchTable->m_h) / 4) - 100;
-            int x = searchTable->x() - 90 + i * (option_btns[i]->width() + 10);
+                ((Window::height() - searchTable->m_h) / 4) - 300;
+            int x = searchTable->x() - 35 + i * (option_btns[i]->width() + 10);
             option_btns[i]->move(x, y);
         }
         else {
             int y = (((Window::height() - searchTable->m_h) / 2) + searchTable->m_h) + 
-                ((Window::height() - searchTable->m_h) / 4) - 50;
+                ((Window::height() - searchTable->m_h) / 4) - 250;
             int j = i - 4;
-            int x = searchTable->x() - 90 + j * (option_btns[i]->width() + 10);
+            int x = searchTable->x() - 35 + j * (option_btns[i]->width() + 10);
             option_btns[i]->move(x, y);
         }
     }
@@ -158,7 +158,7 @@ Management::Management()
     sort_btns.push_back(new PushButton("根据ID排序"));
     sort_btns.push_back(new PushButton("根据姓名排序"));
     sort_btns.push_back(new PushButton("根据总工资排序"));
-    for (int i = 0; i < sort_btns.size(); i++) {
+    for (int i = 0; i < (int)sort_btns.size(); i++) {
         sort_btns[i]->setFixedSize(140, 30);
         int y = m_table->y() + 2 * i * sort_btns[i]->height() - m_table->m_gridH;
         int x = m_table->x()+ m_table->m_gridW * m_table->m_cols + 20;
@@ -259,9 +259,10 @@ int Management::menu()
     
     if (cPushButton->is_clicked()) {
         saveFile("./Images/information.txt");
-        cout << "保存成功" << endl;
+        InputBox((char*)string().c_str(), 1, "保存成功！请点击确认键继续！");
+        //cout << "保存成功" << endl;
     }
-    for (int i = 0; i < menu_btns.size(); i++) {
+    for (int i = 0; i < (int)menu_btns.size(); i++) {
         menu_btns[i]->show();
         //将当前信息同步到菜单按钮
         menu_btns[i]->event_loop(m_msg);
@@ -412,7 +413,7 @@ void Management::statistics()
     m_salaryTable->show();
 
     int op = -1;
-    for (int i = 0; i < sort_btns.size(); i++) {
+    for (int i = 0; i < (int)sort_btns.size(); i++) {
         sort_btns[i]->show();
         //将当前信息同步到菜单按钮
         sort_btns[i]->event_loop(m_msg);
@@ -625,13 +626,14 @@ void Management::erase()
         if (it != vec_staff.end() ) {
             Sleep(200);
             string delName = it->name;
+            int delId = it->id;
             vec_staff.erase(it);
             delBtnOfName->flag = true;
             delTable->clear();
             updateTableData();
             updataSalaryTableData();
-            char tmp[50];
-            sprintf_s(tmp, "姓名为 %s 的数据已删除，请按确认键继续！", delName.c_str());
+            char tmp[150];
+            sprintf_s(tmp, "ID为 %d, 姓名为 %s 的数据已删除,\n请按确认键继续！", delId, delName.c_str());
             InputBox((char*)string().c_str(), 1, tmp);
         }
     }
@@ -680,12 +682,16 @@ void Management::modify()
                 flag:
                 //如果检索到了，则获取要对应修改的数据
                 std::string tmp_1 = searchEdit->getModifyTextInput();
-#if 0
+                if (tmp_1.empty())
+                    return;
+#if 0       
                 cout << "测试5    " << tmp << "   " <<  tmp_1 << endl;
 #endif
                 for (auto& val : vec_staff) {
                     if (val.id == atoi(tmp_1.c_str())) {
-                        InputBox((char*)string().c_str(), 1, "该ID已存在，请重新确认要修改的ID后点击“确认”键继续", "Error", 0, 0, 0, false);
+                        if (vec_modifyStaff[i].id == atoi(tmp_1.c_str()))
+                            break;
+                        InputBox((char*)string().c_str(), 1, "该ID已存在，\n请重新确认要修改的ID后点击“确认”键继续", "Error", 0, 0, 0, false);
                         goto flag;
                     }
                 }
@@ -696,6 +702,7 @@ void Management::modify()
 #if 0
                         cout << "测试3  " << val.id <<  endl;
 #endif
+                        InputBox((char*)string().c_str(), 1, "修改成功！请点击确认键继续！");
                         break;
                     }
                 }
@@ -723,6 +730,7 @@ void Management::modify()
                 for (auto& val : vec_staff) {
                     if (!tmp.compare(to_string(val.id))) {
                         val.name = tmp_1;
+                        InputBox((char*)string().c_str(), 1, "修改成功！请点击确认键继续！");
                         break;
                     }
                 }
@@ -743,6 +751,7 @@ void Management::modify()
                     if (!tmp.compare(to_string(val.id))) {
                         val.salary1 = atoi(tmp_1.c_str());
                         val.salary6 = getAllSalary(val);
+                        InputBox((char*)string().c_str(), 1, "修改成功！请点击确认键继续！");
                     }
                 }
             }
@@ -760,6 +769,7 @@ void Management::modify()
                     if (!tmp.compare(to_string(val.id))) {
                         val.salary2 = atoi(tmp_1.c_str());
                         val.salary6 = getAllSalary(val);
+                        InputBox((char*)string().c_str(), 1, "修改成功！请点击确认键继续！");
                     }
                 }
             }
@@ -777,6 +787,7 @@ void Management::modify()
                     if (!tmp.compare(to_string(val.id))) {
                         val.salary3 = atoi(tmp_1.c_str());
                         val.salary6 = getAllSalary(val);
+                        InputBox((char*)string().c_str(), 1, "修改成功！请点击确认键继续！");
                     }
                 }
             }
@@ -794,6 +805,7 @@ void Management::modify()
                     if (!tmp.compare(to_string(val.id))) {
                         val.salary4 = atoi(tmp_1.c_str());
                         val.salary6 = getAllSalary(val);
+                        InputBox((char*)string().c_str(), 1, "修改成功！请点击确认键继续！");
                     }
                 }
             }
@@ -811,6 +823,7 @@ void Management::modify()
                     if (!tmp.compare(to_string(val.id))) {
                         val.salary5 = atoi(tmp_1.c_str());
                         val.salary6 = getAllSalary(val);
+                        InputBox((char*)string().c_str(), 1, "修改成功！请点击确认键继续！");
                     }
                 }
             }

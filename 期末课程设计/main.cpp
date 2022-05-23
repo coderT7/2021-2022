@@ -3,7 +3,7 @@
 #include"Window.h"
 #include<ctime>
 #include<graphics.h>
-#pragma comment(lib,"Winmm.lib")\
+#pragma comment(lib,"Winmm.lib")
 
 int main()
 {
@@ -12,7 +12,7 @@ int main()
 	mciSendString("play BGM", 0, 0, 0);
 #endif
 	//创建窗口
-	Window window(1024,1024,EW_SHOWCONSOLE|EW_NOCLOSE);
+	Window window(1024,1024,EW_NOCLOSE);
 	//设置窗口标题
 	window.setWindowTitle("职工管理系统");
 	//实例化管理对象
