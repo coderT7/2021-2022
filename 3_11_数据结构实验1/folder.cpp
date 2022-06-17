@@ -4,8 +4,9 @@
 #include"folder.h"
 #include"SeqList.h"
 #include"singleList.h"
+#include<unordered_map>
 #include<stack>
-
+#include<map>
 using namespace std;
 void _menu()
 {
@@ -277,10 +278,12 @@ static void stack_clear(stack<char>& checkStack) {
 		checkStack.pop();
 	}
 }
-void stackList_work()
+void stackList_work(const char* fileName)
 {
-	FILE* pFile = fopen("chrome.txt", "r");
+	FILE* pFile = fopen(fileName, "r");
+	//multimap<char, int> checkMap;//记录
 	stack<char> checkStack;
+	stack<int> checkStackEmpty;
 	int row = 0, col = 0;
 	bool flag = true;
 	int input = 0;
@@ -296,7 +299,7 @@ void stackList_work()
 			while (fgets(tmp, 2048, pFile)) {
 				//stack_clear(checkStack);
 				row++;
-				//if((tmp[0] != '\n') && (tmp[0] != '\0'))
+				if((tmp[0] != '\n') && (tmp[0] != '\0'))
 				for (int i = 0; i < strlen(tmp); i++) {
 					switch (tmp[i]) {
 					case '<':
@@ -307,6 +310,8 @@ void stackList_work()
 					case '[':
 					case '(':
 					case '{':
+						//checkMap.insert(make_pair(tmp[i], row));
+						checkStackEmpty.push(row);
 						checkStack.push(tmp[i]);
 						break;
 					case '>':
@@ -320,10 +325,13 @@ void stackList_work()
 						}
 						else {
 							char res = checkStack.top();
+							checkStackEmpty.pop();
+							//auto it = checkMap.find(res);
+							//checkMap.erase(it);
 							checkStack.pop();
 							if (tmp[i] == '>' && res != '<'
 								|| tmp[i] == ']' && res != '['
-								|| tmp[i] == ')' && res != '('
+								|| tmp[i] == '(' && res != '('
 								|| tmp[i] == '}' && res != '{') {
 								flag = false;
 								cout << "第" << row << "行" << ",第" << i << "列不匹配" << endl;
@@ -336,20 +344,33 @@ void stackList_work()
 						break;
 					}
 				}
-				/*while (!checkStack.empty()) {
-					flag = false;
-					for (int i = 0; i < strlen(tmp); i++) {
-						char res = checkStack.top();
-						if (res == tmp[i]) {
-							cout << "第" << row << "行" << ",第" << i << "列不匹配" << endl;
-							cout << tmp << endl;
-						}
-					}
-					checkStack.pop();
-				}*/
+			//	while (!checkStack.empty()) {
+			//		flag = false;
+			//		for (int i = 0; i < strlen(tmp); i++) {
+			//			char res = checkStack.top();
+			//			if (res == tmp[i]) {
+			//				cout << "第" << row << "行" << ",第" << i << "列不匹配" << endl;
+			//				cout << tmp << endl;
+			//			}
+			//		}
+			//		checkStack.pop();
+			//	}
 			}
-			if (flag) {
+
+			if (flag && checkStack.empty()) {
 				cout << "全部括号匹配" << endl;
+			}
+			//if (!checkStack.empty()) {
+			//	for (auto it : checkMap) {
+			//		cout << "第" << it.second << "行有" << it.first << "不匹配" << endl;
+			//	}
+			//}
+			while (!checkStack.empty()) {
+				int row = checkStackEmpty.top();
+				char res = checkStack.top();
+				checkStack.pop();
+				checkStackEmpty.pop();
+				cout << "第" << row << "行有" << res << "不匹配" << endl;
 			}
 			system("pause");
 		}
@@ -466,7 +487,7 @@ void inside_floder() {
 			singleList_work();
 			break;
 		case stackListWork:
-			stackList_work();
+			stackList_work(str.c_str());
 			break;
 		case Exit:
 			cout << "已返回上一层" << endl;
