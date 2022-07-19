@@ -32,15 +32,14 @@ public:
                 }
             }
             else {
-                b
-                    // ”“∞Î±ﬂ”––Ú
-                    if (nums[mid] <= target && target <= nums[n]) {
-                        // targetµƒ÷µ‘⁄”“∞Î±ﬂ
-                        l = mid + 1;
-                    }
-                    else {
-                        r = mid - 1;
-                    }
+                // ”“∞Î±ﬂ”––Ú
+                if (nums[mid] <= target && target <= nums[n]) {
+                    // targetµƒ÷µ‘⁄”“∞Î±ﬂ
+                    l = mid + 1;
+                }
+                else {
+                    r = mid - 1;
+                }
             }
         }
         return -1;
