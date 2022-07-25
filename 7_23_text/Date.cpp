@@ -1,17 +1,15 @@
 #include "Date.h"
 #include<math.h>
 
-
-ostream& operator<<(ostream& out, Date date) {
-	out << date._year << " 年 " << date._month << " 月 " << date._day << " 日 " << endl;
-	return out;
-}
-
 Date::Date(int year, int month, int day)
 {
     this->_year = year;
     this->_month = month;
     this->_day = day;
+
+    if (!checkDate()) {
+        cout << "构造日期非法" << endl;
+    }
 }
 
 Date::Date(const Date& d)
@@ -38,6 +36,10 @@ Date::~Date()
 Date& Date::operator+=(int day)
 {
     // TODO: 在此处插入 return 语句
+    if (day < 0) {
+        return *this -= -day;
+    }
+
     int newDay = _day + day;
     while (newDay > GetMonthDay(_year, _month)) {
         newDay -= GetMonthDay(_year, _month);
@@ -51,14 +53,14 @@ Date& Date::operator+=(int day)
     return *this;
 }
 
-Date Date::operator+(int day)
+Date Date::operator+(int day)const
 {
     Date res(*this);
     res += day;
     return res;
 }
 
-Date Date::operator-(int day)
+Date Date::operator-(int day)const
 {
     Date res(*this);
     res -= day;
@@ -68,10 +70,13 @@ Date Date::operator-(int day)
 Date& Date::operator-=(int day)
 {
     // TODO: 在此处插入 return 语句
+    if (day < 0) {
+        return *this += -day;
+    }
     int newDay = _day - day;
-    while (newDay < GetMonthDay(_year, _month)) {
+    while (newDay <= 0) {
         _month--;
-        if (_month == 1) {
+        if (_month == 0) {
             _month = 12;
             _year--;
         }
@@ -130,47 +135,54 @@ Date& Date::operator--()
     return *this;
 }
 
-bool Date::operator>(const Date& d)
+bool Date::operator>(const Date& d)const
 {
     return _year > d._year ? true : _year < d._year ? false : 
         _month > d._month ? true : _month < d._month ? false : 
         _day > d._day ? true : false;
 }
 
-bool Date::operator==(const Date& d)
+bool Date::operator==(const Date& d)const
 {
     return _year == d._year && _month == d._month && _day == d._day;
 }
 
-bool Date::operator>=(const Date& d)
+bool Date::operator>=(const Date& d)const
 {
     return *this == d || *this > d;
 }
 
-bool Date::operator<(const Date& d)
+bool Date::operator<(const Date& d)const
 {
     return !(*this >= d);
 }
 
-bool Date::operator<=(const Date& d)
+bool Date::operator<=(const Date& d)const
 {
     return !(*this > d);
 }
 
-bool Date::operator!=(const Date& d)
+bool Date::operator!=(const Date& d)const
 {
     return !(*this == d);
 }
 
-int Date::operator-(const Date& d)
+int Date::operator-(const Date& d)const
 {
-    if (*this == d) {
-        return 0;
+    int flag = 1;
+    Date max = *this;
+    Date min = d;
+    if (*this < d) {
+        max = d;
+        min = *this;
+        flag = -1;
     }
-    int count = 0;
-    int nowDays = this->_GetMonthDay(_year, _month) + this->GetYearDay(_year) + this->_day;
-    int toDays = _GetMonthDay(d._year, d._month) + GetYearDay(d._year) + d._day;
-    return abs(nowDays - toDays);
+    int n = 0;
+    while (min != max) {
+        ++min;
+        ++n;
+    }
+    return n * flag;
 }
 
 

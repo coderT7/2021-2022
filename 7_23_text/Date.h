@@ -1,10 +1,10 @@
 #pragma once
 #include<iostream>
 using namespace std;
-
 class Date
 {
-	friend ostream& operator<<(ostream& out, Date date);
+	friend ostream& operator<<(ostream& out, const Date& date);
+	friend istream& operator>>(istream& in, Date& date);
 public:
 	// 获取某年某月的天数
 	//放在类内实现作为inline
@@ -17,31 +17,13 @@ public:
 			return day[month];
 		}
 	}
-	int GetYearDay(int year) {
-		static int day[13] = { 0,31,28,31,30,31,30,31,31,30,31,30,31 };
-		int days = 0;
-		while (year--) {
-			for (int i = 1; i < 13; i++) {
-				days += day[i];
-			}
-			if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0) {
-				days += 1;
-			}
+	bool checkDate() {
+		if (_year >= 1
+			&& _month > 0 && _month < 13
+			&& _day > 0 && _day < GetMonthDay(_year, _month)) {
+			return true;
 		}
-		return days;
-	}
-	int _GetMonthDay(int year,int month) {
-		static int day[13] = { 0,31,28,31,30,31,30,31,31,30,31,30,31 };
-		int days = 0;
-		while (month) {
-			if (month == 2 && year % 4 == 0 && year % 100 != 0 || year % 400 == 0) {
-				days += 29;
-				month--;
-				continue;
-			}
-			days += day[month--];
-		}
-		return days;
+		return false;
 	}
 	// 全缺省的构造函数
 	Date(int year = 1900, int month = 1, int day = 1);
@@ -56,9 +38,9 @@ public:
 	// 日期+=天数
 	Date& operator+=(int day);
 	// 日期+天数
-	Date operator+(int day);
+	Date operator+(int day) const;
 	// 日期-天数
-	Date operator-(int day);
+	Date operator-(int day) const;
 	// 日期-=天数
 	Date& operator-=(int day);
 	// 前置++
@@ -70,19 +52,19 @@ public:
 	// 前置--
 	Date& operator--();
 	// >运算符重载
-	bool operator>(const Date& d);
+	bool operator>(const Date& d) const;
 	// ==运算符重载
-	bool operator==(const Date& d);
+	bool operator==(const Date& d) const;
 	// >=运算符重载
-	bool operator >= (const Date& d);
+	bool operator >= (const Date& d) const;
 	// <运算符重载
-	bool operator < (const Date& d);
+	bool operator < (const Date& d) const;
 	// <=运算符重载
-	bool operator <= (const Date& d);
+	bool operator <= (const Date& d) const;
 	// !=运算符重载
-	bool operator != (const Date& d);
+	bool operator != (const Date& d) const;
 	// 日期-日期 返回天数
-	int operator-(const Date& d);
+	int operator-(const Date& d) const;
 
 private:
 	int _year;
@@ -90,4 +72,17 @@ private:
 	int _day;
 };
 
+
+inline ostream& operator<<(ostream& out, const Date& date) {
+	out << date._year << " 年 " << date._month << " 月 " << date._day << " 日 " << endl;
+	return out;
+}
+
+inline istream& operator>>(istream& in, Date& date) {
+	in >> date._year >> date._month >> date._day;
+	if (!date.checkDate()) {
+		cout << "输入日期非法" << endl;
+	}
+	return in;
+}
 
