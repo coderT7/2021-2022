@@ -7,13 +7,20 @@ namespace m_std {
 		friend std::ostream& operator<<(std::ostream& out, m_std::string& str);
 	public:
 		typedef char* iterator;
+		typedef const char* const_iterator;
 		iterator begin() {
 			return _str;
 		}
 		iterator end() {
 			return _str + _size;
 		}
-	private:
+		const_iterator begin() const{
+			return _str;
+		}
+		const_iterator end() const{
+			return _str + _size;
+		}
+	public:
 		char* _str;
 		size_t _size;
 		size_t _capacity;
@@ -24,7 +31,24 @@ namespace m_std {
 			_str = new char[_capacity+1];
 			strcpy(_str, str);
 		}
-
+		//Éî¿½±´
+		string(const string& s) 
+			: _str(new char[s._capacity]),
+			_size(s._size),
+			_capacity(s._capacity)
+		{
+			strcpy(_str, s._str);
+		}
+		string& operator=(const string& s) {
+			if (this != nullptr) {
+				this->_size = s._size;
+				this->_capacity = s._capacity;
+				this->_str = new char[s._capacity + 1];
+				strcpy(_str, s._str);
+				delete s._str;
+			}
+			return *this;
+		}
 		~string() {
 			delete[] _str;
 			_size = _capacity = 0;
@@ -40,6 +64,10 @@ namespace m_std {
 			assert(pos < _size);
 			return _str[pos];
 		}
+		const char* c_str() const{
+			return _str;
+		}
+
 
 	};
 	std::ostream& operator<<(std::ostream& out, m_std::string& str) {
