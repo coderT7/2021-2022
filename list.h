@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <assert.h>
+#include "reverse_iterator.h"
 namespace m_std
 {
     template <typename T>
@@ -57,7 +58,7 @@ namespace m_std
         iterator
         operator++(int)
         {
-            iterator tmp = *this;
+            iterator tmp = *this;0
             _node = _node->_next;
             return tmp;
         }
@@ -87,6 +88,26 @@ namespace m_std
     public:
         typedef __list_iterator<T, T &, T *> iterator;
         typedef __list_iterator<T, const T &, const T *> const_iterator;
+        typedef __reverse_iterator<iterator, T &, T *> reverse_iterator;
+        typedef __reverse_iterator<const_iterator, const T &, const T *> const_reverse_iterator;
+
+        reverse_iterator rbegin()
+        {
+            return reverse_iterator(end());
+        }
+        reverse_iterator rend()
+        {
+            return reverse_iterator(begin());
+        }
+        const_reverse_iterator rbegin() const
+        {
+            return const_reverse_iterator(end());
+        }
+        const_reverse_iterator rend() const
+        {
+            return const_reverse_iterator(begin());
+        }
+
         const_iterator begin() const
         {
             return const_iterator(_head->_next);
@@ -104,7 +125,8 @@ namespace m_std
         {
             return iterator(_head);
         }
-        void init_empty(){
+        void init_empty()
+        {
             _head = new Node;
             _head->_next = _head;
             _head->_prev = _head;
@@ -123,12 +145,14 @@ namespace m_std
                 first++;
             }
         }
-        list(const list<T>& x){
+        list(const list<T> &x)
+        {
             init_empty();
             list<T> tmp(x.begin(), x.end());
             swap(tmp);
         }
-        void swap(list<T>& x){
+        void swap(list<T> &x)
+        {
             std::swap(_head, x._head);
         }
         list<T> &operator=(list<T> x)
@@ -195,13 +219,14 @@ namespace m_std
     private:
         Node *_head;
     };
-    void Func(const list<int>& l)
+    void Func(const list<int> &l)
     {
-        list<int>::const_iterator it = l.begin();
-        while(it != l.end()){
+        list<int>::const_reverse_iterator it = l.rbegin();
+        while (it != l.rend())
+        {
             std::cout << *it << std::endl;
             // *it = 10; //无法修改，只读
-            it++;
+            ++it;
         }
     }
     void text03()
@@ -212,14 +237,22 @@ namespace m_std
         lt.push_back(3);
         lt.push_back(4);
         lt.push_back(5);
-        list<int> lt1(lt);
-        for(auto val : lt1){
-            std::cout << val << " ";
-        }
-        list<int> lt2;
-        lt2 = lt1;
-        for(auto val : lt2){
-            std::cout << val << " ";
+        // list<int> lt1(lt);
+        // for (auto val : lt1)
+        // {
+        //     std::cout << val << " ";
+        // }
+        // list<int> lt2;
+        // lt2 = lt1;
+        // for (auto val : lt2)
+        // {
+        //     std::cout << val << " ";
+        // }
+        auto rit = lt.rbegin();
+        while (rit != lt.rend())
+        {
+            std::cout << *rit << " ";
+            rit;
         }
     }
     void text02()
